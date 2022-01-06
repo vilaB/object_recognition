@@ -1,4 +1,4 @@
-from comite import Comite
+from sistema.comite import Comite
 import numpy as np
 import statistics
 
@@ -10,11 +10,11 @@ funcion_FDR = 'percentil'       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = 'mediana'            # Función a nivel de secuencia
 percentil_SDR = 0.25
-
+tamano_maximo_comite = 18   
 
 class Sistema():
-    comites_no_supervisados: list[Comite] = []
-    comites_supervisados: list[Comite] = []
+    comites_no_supervisados: list = []
+    comites_supervisados: list = []
     muestra_de_inicializacion = None
 
     def __init__(self, muestra_de_inicializacion: list):
@@ -31,7 +31,8 @@ class Sistema():
 
     def entrenar(self, secuencia: list, individuo: int):
         prediccion = self.entrenamiento_no_supervisado(secuencia)
-        self.comites_no_supervisados[prediccion].purgar_comite()
+        print(individuo, prediccion)
+        self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
 
@@ -85,14 +86,14 @@ class Sistema():
             comite.eliminar_miembros_marcados()
 
 
-    def __funcion_decision_comite_ganador(puntuaciones_comites: list) -> int:
+    def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:
         if min(puntuaciones_comites) < umbral_actualizacion:
             prediccion = np.argmin(puntuaciones_comites)
         else:
             prediccion = -1
         return prediccion
     
-    def __presentar_secuencia(self, secuencia, comites: list[Comite]):
+    def __presentar_secuencia(self, secuencia, comites: list):
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for comite in comites:
@@ -123,6 +124,6 @@ class Sistema():
 
 def generar_negativos(muestras_inicializacion: list, posicion_positivo: int):
     negativos = np.array(muestras_inicializacion[0:posicion_positivo] + muestras_inicializacion[posicion_positivo + 1:]) # Cogemos como negativos todas las demás secuencias menos la propa: usamos esta aritmética de listas para evitar hacer una deepcopy
-    negativos = np.vstack(negativos[:, 0])
+    negativos = np.vstack(negativos[:])
     negativos = np.vstack([negativos])
     return negativos
