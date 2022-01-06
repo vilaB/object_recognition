@@ -1,6 +1,5 @@
 from comite import Comite
 import numpy as np
-from comite import construir_muestra_de_entrenamiento
 import statistics
 
 
@@ -12,8 +11,6 @@ percentil_FDR = 0.16
 modo_SDR = 'mediana'            # Función a nivel de secuencia
 percentil_SDR = 0.25
 
-
-# TODO: healing
 
 class Sistema():
     comites_no_supervisados: list[Comite] = []
@@ -42,10 +39,7 @@ class Sistema():
     def entrenamiento_no_supervisado(self, secuencia: list):
         # Predicción por parte del sistema no supervisado
         puntuaciones_comites, puntuaciones_imagenes_de_comites = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
-        if min(puntuaciones_comites) < umbral_actualizacion:
-            prediccion = np.argmin(puntuaciones_comites)
-        else:
-            prediccion = -1
+        prediccion = self.__funcion_decision_comite_ganador(puntuaciones_comites)
 
         if prediccion >= 0:
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
@@ -77,7 +71,26 @@ class Sistema():
         positivos = np.vstack(positivos)
         negativos = generar_negativos(self.muestra_de_inicializacion, individuo)
         comite.entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
+    
 
+    def healing(self):
+        for i, comite in enumerate(self.comites_no_supervisados):
+            secuencias_positivas = comite.obtener_positivos()
+            for j, secuencia in enumerate(secuencias_positivas):                                    # Número de clasificador, secuencia usada para su creación
+                puntuaciones = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
+                prediccion = self.__funcion_decision_comite_ganador(puntuaciones)
+                if prediccion != i:
+                    comite.marcar_miembro_para_eliminar(j)
+        for comite in self.comites_no_supervisados:
+            comite.eliminar_miembros_marcados()
+
+
+    def __funcion_decision_comite_ganador(puntuaciones_comites: list) -> int:
+        if min(puntuaciones_comites) < umbral_actualizacion:
+            prediccion = np.argmin(puntuaciones_comites)
+        else:
+            prediccion = -1
+        return prediccion
     
     def __presentar_secuencia(self, secuencia, comites: list[Comite]):
         puntuaciones_de_cada_comite = []

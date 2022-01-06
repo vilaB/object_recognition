@@ -27,6 +27,22 @@ class Comite():
         return matriz_puntuaciones
 
     
+    def obtener_positivos(self) -> list:
+        return [miembro['positivos'] for miembro in self.miembros]  # Positivos usados para crear cada uno de los clasificadores
+
+    
+    def marcar_miembro_para_eliminar(self, indice_miembro: int) -> None:
+        if indice_miembro == 0:
+            print('No se puede eliminar el primer miembro del comite')
+            return
+        self.miembros[indice_miembro]['eliminar'] = True
+
+
+    def eliminar_miembros_marcados(self) -> None:
+        self.miembros = [miembro for miembro in self.miembros if miembro.get['eliminar'] is None]
+
+
+    # Módulo limitación
     def purgar_comite(self, tamano: int, muestra_inicializacion: list) -> None:
         tamano_banco_div1_2 = 50
 
