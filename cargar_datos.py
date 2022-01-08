@@ -2,7 +2,7 @@ import numpy as np
 from sistema.sistema import numero_positivos
 import os
 
-orden_presentacion = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11"]
+orden_presentacion = ["s1", "s2", "s4", "s5", "s6", "s8", "s9", "s11", "s3", "s7", "s10"]
 orden_presentacion_objetos = ['o1', 'o10', 'o11', 'o12', 'o13', 'o14', 'o15', 'o16', 'o17', 'o18', 'o19', 'o2', 'o20', 'o21', 'o22', 'o23', 'o24', 'o25', 'o26', 'o27', 'o28', 'o29', 'o3', 'o30', 'o31', 'o32', 'o33', 'o34', 'o35', 'o36', 'o37', 'o38', 'o39', 'o4', 'o40', 'o41', 'o42', 'o43', 'o44', 'o45', 'o46', 'o47', 'o48', 'o49', 'o50', 'o5', 'o6', 'o7', 'o8', 'o9']
 
 def cargar_CORe50(directorio: str) -> list:

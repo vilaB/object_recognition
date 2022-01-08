@@ -13,13 +13,15 @@ percentil_SDR = 0.25
 tamano_maximo_comite = 18   
 
 class Sistema():
-    comites_no_supervisados: list = []
-    comites_supervisados: list = []
+    comites_no_supervisados: list[Comite] = None
+    comites_supervisados: list[Comite] = None 
     muestra_de_inicializacion = None
 
     def __init__(self, muestra_de_inicializacion: list):
         print("Construcción del sistema en curso...")
         self.muestra_de_inicializacion = muestra_de_inicializacion
+        self.comites_no_supervisados = []
+        self.comites_supervisados = []
         for individuo in range(len(muestra_de_inicializacion)):
             negativos = generar_negativos(muestra_de_inicializacion, individuo)
             comite_no_supervisado = Comite(positivos=muestra_de_inicializacion[individuo], negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos)
@@ -27,11 +29,28 @@ class Sistema():
             self.comites_no_supervisados.append(comite_no_supervisado)
             self.comites_supervisados.append(comite_supervisado)
         print("Construcción del sistema finalizada.")
+        print("Los parámetros del sistema son: ")
+        print("\t- Número de positivos (creación SVM): ", numero_positivos)
+        print("\t- Número de negativos (creación SVM): ", numero_negativos)
+        print("\t- Umbral de actualización: ", umbral_actualizacion)
+        print("\t- Función de FDR: ", funcion_FDR)
+        print("\t- Percentil de FDR: ", percentil_FDR)
+        print("\t- Función de SDR: ", modo_SDR)
+        print("\t- Percentil de SDR: ", percentil_SDR)
+        print("\t- Tamaño máximo de comité: ", tamano_maximo_comite)
+
+
+    def test(self, secuencia: list, individuo: int):
+        puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
+        prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados)
+
+        puntuaciones_comites_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_supervisados)
+        prediccion_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_supervisados)
+        return prediccion_no_supervisados == individuo, prediccion_supervisados == individuo
 
 
     def entrenar(self, secuencia: list, individuo: int):
         prediccion = self.entrenamiento_no_supervisado(secuencia)
-        print(individuo, prediccion)
         self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
@@ -93,7 +112,7 @@ class Sistema():
             prediccion = -1
         return prediccion
     
-    def __presentar_secuencia(self, secuencia, comites: list):
+    def __presentar_secuencia(self, secuencia, comites: list[Comite]):
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for comite in comites:
