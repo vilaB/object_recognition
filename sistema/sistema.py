@@ -39,6 +39,21 @@ class Sistema():
         print("\t- Percentil de SDR: ", percentil_SDR)
         print("\t- Tamaño máximo de comité: ", tamano_maximo_comite)
 
+    
+    # str method
+    def __str__(self):
+        return """
+        Sistema:
+            - Número de positivos (creación SVM): {}
+            - Número de negativos (creación SVM): {}
+            - Umbral de actualización: {}
+            - Función de FDR: {}
+            - Percentil de FDR: {}
+            - Función de SDR: {}
+            - Percentil de SDR: {}
+            - Tamaño máximo de comité: {}
+            """.format(numero_positivos, numero_negativos, umbral_actualizacion, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite)
+
 
     def test(self, secuencia: list, individuo: int):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
