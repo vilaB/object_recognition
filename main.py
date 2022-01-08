@@ -17,13 +17,17 @@ def experimento():
     test = dataset[9:]
     res_nosup, res_sup = [], []
 
+    nosup, sup = fase_test(sistema, test)
+    res_nosup.append(nosup)
+    res_sup.append(sup)
+
     for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
         # Fase Entrenamiento
         for individuo, secuencia in enumerate(escena):
             secuencias = np.array_split(secuencia, num_subsecuencias)
             for secuencia in secuencias:
                 sistema.entrenar(secuencia, individuo)
-        nosup, sup = test(sistema, test)
+        nosup, sup = fase_test(sistema, test)
         res_nosup.append(nosup)
         res_sup.append(sup)
     print("FIN EXPERIMENTO")
@@ -32,7 +36,7 @@ def experimento():
     return sistema
 
 
-def test(sistema: Sistema, test: list):
+def fase_test(sistema: Sistema, test: list):
     # Fase Test
     secuencias_evaluadas = 0
     aciertos_nosup = 0
@@ -98,14 +102,14 @@ sistema = experimento()
 # Guardar resultados
 f = open(str(identificador) + "resultados_nosup.txt", "w")
 for exp in resultados_nosup:
-    f.write('\t'.join(exp).replace(".", ",") + "\n")
+    f.write('\t'.join([str(e) for e in exp]).replace(".", ",") + "\n")
 f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 f.write("\n" + str(sistema))
 f.close()
 
 f = open(str(identificador) + "resultados_sup.txt", "w")
 for exp in resultados_sup:
-    f.write('\t'.join(exp).replace(".", ",") + "\n")
+    f.write('\t'.join([str(e) for e in exp]).replace(".", ",") + "\n")
 f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 f.write("\n" + str(sistema))
 f.close()
