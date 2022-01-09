@@ -112,7 +112,7 @@ class Sistema():
         for i, comite in enumerate(self.comites_no_supervisados):
             secuencias_positivas = comite.obtener_positivos()
             for j, secuencia in enumerate(secuencias_positivas):                                    # Número de clasificador, secuencia usada para su creación
-                puntuaciones = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
+                puntuaciones, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
                 prediccion = self.__funcion_decision_comite_ganador(puntuaciones)
                 if prediccion != i:
                     comite.marcar_miembro_para_eliminar(j)
