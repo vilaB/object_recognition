@@ -27,6 +27,7 @@ def experimento():
             secuencias = np.array_split(secuencia, num_subsecuencias)
             for secuencia in secuencias:
                 sistema.entrenar(secuencia, individuo)
+        sistema.healing()
         nosup, sup = fase_test(sistema, test)
         res_nosup.append(nosup)
         res_sup.append(sup)
