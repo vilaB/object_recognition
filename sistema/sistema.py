@@ -13,8 +13,8 @@ percentil_SDR = 0.25
 tamano_maximo_comite = 18   
 
 class Sistema():
-    comites_no_supervisados: list[Comite] = None
-    comites_supervisados: list[Comite] = None 
+    comites_no_supervisados: list = None
+    comites_supervisados: list = None 
     muestra_de_inicializacion = None
 
     def __init__(self, muestra_de_inicializacion: list):
@@ -127,7 +127,7 @@ class Sistema():
             prediccion = -1
         return prediccion
     
-    def __presentar_secuencia(self, secuencia, comites: list[Comite]):
+    def __presentar_secuencia(self, secuencia, comites: list):
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for comite in comites:

@@ -40,7 +40,7 @@ class Comite():
 
 
     def eliminar_miembros_marcados(self) -> None:
-        self.miembros = [miembro for miembro in self.miembros if miembro.get['eliminar'] is None]
+        self.miembros = [miembro for miembro in self.miembros if miembro.get('eliminar') is None]
 
 
     # Módulo limitación
