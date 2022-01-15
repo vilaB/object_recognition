@@ -39,6 +39,7 @@ class Sistema():
         print("\t- Función de SDR: ", modo_SDR)
         print("\t- Percentil de SDR: ", percentil_SDR)
         print("\t- Tamaño máximo de comité: ", tamano_maximo_comite)
+        print("\t- Función de decisión del comité ganador: ", funcion_decision_comite_ganador)
 
     
     # str method
@@ -89,7 +90,8 @@ class Sistema():
             positivos = np.vstack(positivos)
             negativos = generar_negativos(self.muestra_de_inicializacion, prediccion)
             self.comites_no_supervisados[prediccion].entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
-            return prediccion
+        return prediccion
+        
     
 
     def entrenamiento_supervisado(self, secuencia: list, individuo: int):
@@ -145,7 +147,7 @@ class Sistema():
 
         return prediccion
 
-    def __weibull(x,n,a):
+    def __weibull(self, x,n,a):
         return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
     def __presentar_secuencia(self, secuencia, comites: list):
