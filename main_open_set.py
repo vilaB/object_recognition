@@ -42,6 +42,9 @@ def experimento():
     for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
         # Fase Entrenamiento
         for individuo, secuencia in enumerate(escena):
+            for desconocido in desconocidos: 
+                if desconocido < individuo:
+                    individuo -= 1
             secuencias = np.array_split(secuencia, num_subsecuencias)
             for secuencia in secuencias:
                 sistema.entrenar(secuencia, individuo)
@@ -69,6 +72,9 @@ def fase_test(sistema: Sistema, test: list, desconocidos: list = None):
     open_set_nosup = {'positivo-positivo': 0, 'positivo-negativo': 0, 'negativo-positivo': 0, 'negativo-negativo': 0}
     for num_escena in range(len(test)):
         for individuo, secuencia_entrenamiento in enumerate(test[num_escena]):
+            for desconocido in desconocidos: 
+                if desconocido < individuo:
+                    individuo -= 1
             secuencias = np.array_split(secuencia_entrenamiento, num_subsecuencias)
             for secuencia in secuencias:
                 secuencias_evaluadas +=1
