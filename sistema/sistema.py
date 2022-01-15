@@ -5,7 +5,7 @@ from scipy import stats
 
 numero_positivos=25
 numero_negativos=100
-umbral_reconocimiento=np.inf
+umbral_reconocimiento=0.1
 funcion_FDR = 'percentil'       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = 'mediana'            # Función a nivel de secuencia
