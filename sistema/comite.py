@@ -59,21 +59,26 @@ class Comite():
                 data_bank_red = data_bank_red.astype(np.float32)
                 puntuaciones = self.procesar_secuencia(data_bank_red)  # [puntuaciones_svm_1, puntuaciones_svm2 ...] -> cada puntuaciones sn las puntuaciones para toda la secuencia ( num_clasificadores x num_frames)
                 puntuaciones = np.transpose(puntuaciones)  # Lo traspone (num_frames x num_clasificadores)
+
                 if modo_limitacion == 'div_1':
                     signed_scores = np.sign(puntuaciones)  # Aplica función signal: The `sign` function returns ``-1 if x < 0, 0 if x==0, 1 if x > 0`` ( num_frames x num_clasificadores)
                     div_points = np.zeros([1, signed_scores.shape[1]])  # Array con ceros, del tamaño del número de clasificadores (num_clasificadores)
                     for i in range(signed_scores.shape[0]):  # Para cada frame... (fila)
                         aux_signed = np.reshape(np.repeat(signed_scores[i, :], signed_scores.shape[1]), [signed_scores.shape[1], signed_scores.shape[1]])
                         div_points = div_points + np.dot(aux_signed, signed_scores[i, :]) - signed_scores[i,:] * signed_scores[i,:]  # Acumula los valores de diversidad para el frame en cuestión con la movida esta
-                    args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
-                    to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
                 elif modo_limitacion == 'div_2':
                     div_points = np.zeros([1, puntuaciones.shape[1]])
                     for i in range(puntuaciones.shape[0]):
                         mat_scores = np.reshape(np.repeat(puntuaciones[i, :], puntuaciones.shape[1]),[puntuaciones.shape[1], puntuaciones.shape[1]])
                         div_points = div_points + np.sum(np.abs(mat_scores - np.transpose(mat_scores)), axis=0)
-                    args_to_pop = np.argsort(div_points)
-                    to_pop = list(args_to_pop[0, :len(self.miembros) - tamano])
+
+                args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
+                to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
+                if 0 in to_pop:
+                    print("El primer clasificador no puede eliminarse por diversidad")
+                    to_pop.remove(0)
+                    to_pop.append(args_to_pop[0, (tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
+                
 
             to_pop = sorted(to_pop, reverse=True)
             for miembro in to_pop:
