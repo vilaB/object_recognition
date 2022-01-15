@@ -20,13 +20,16 @@ def metricas_open_set(resultados: dict):
 
 def elegir_desconocidos(objetos: list, porcentaje: float):
     num_desconocidos = int(len(objetos)*porcentaje)
-    return random.sample(range(0, 50), num_desconocidos).sort(reverse=True)
+    lst = random.sample(range(0, 50), num_desconocidos)
+    lst.sort(reverse=True)
+    return lst
 
 
 def experimento():
     print("INICIO EXPERIMENTO")
     primera_escena_inicializacion = dataset[0]
     desconocidos = elegir_desconocidos(primera_escena_inicializacion, porcentaje_desconocidos)
+    print(desconocidos)
     for desconocido in desconocidos:
         primera_escena_inicializacion.pop(desconocido)
     sistema = Sistema(primera_escena_inicializacion)
