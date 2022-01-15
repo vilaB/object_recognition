@@ -1,16 +1,17 @@
 from sistema.comite import Comite
 import numpy as np
 import statistics
-
+from scipy import stats
 
 numero_positivos=25
 numero_negativos=100
-umbral_actualizacion=np.inf
+umbral_reconocimiento=np.inf
 funcion_FDR = 'percentil'       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = 'mediana'            # Función a nivel de secuencia
 percentil_SDR = 0.25
-tamano_maximo_comite = 18   
+tamano_maximo_comite = 18
+funcion_decision_comite_ganador = 'weibull'   # Mayor respuesta o weibull
 
 class Sistema():
     comites_no_supervisados: list[Comite] = None
@@ -32,7 +33,7 @@ class Sistema():
         print("Los parámetros del sistema son: ")
         print("\t- Número de positivos (creación SVM): ", numero_positivos)
         print("\t- Número de negativos (creación SVM): ", numero_negativos)
-        print("\t- Umbral de actualización: ", umbral_actualizacion)
+        print("\t- Umbral de reconocimiento: ", umbral_reconocimiento)
         print("\t- Función de FDR: ", funcion_FDR)
         print("\t- Percentil de FDR: ", percentil_FDR)
         print("\t- Función de SDR: ", modo_SDR)
@@ -52,7 +53,7 @@ class Sistema():
             - Función de SDR: {}
             - Percentil de SDR: {}
             - Tamaño máximo de comité: {}
-            """.format(numero_positivos, numero_negativos, umbral_actualizacion, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite)
+            """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite)
 
 
     def test(self, secuencia: list, individuo: int):
@@ -66,7 +67,7 @@ class Sistema():
 
     def entrenar(self, secuencia: list, individuo: int):
         prediccion = self.entrenamiento_no_supervisado(secuencia)
-        self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
+        if prediccion >= 0: self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
 
@@ -92,20 +93,21 @@ class Sistema():
     
 
     def entrenamiento_supervisado(self, secuencia: list, individuo: int):
-        comite = self.comites_supervisados[individuo]
-        matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
-        puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
+        if individuo >= 0:
+            comite = self.comites_supervisados[individuo]
+            matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
+            puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
 
-        puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-        puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
-        indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
-        positivos = []
-        for indice in indices_ordenados[:numero_positivos]:
-            positivos.append(secuencia[indice, :].reshape(1, -1))
-        indice = indices_ordenados[numero_positivos - 1]
-        positivos = np.vstack(positivos)
-        negativos = generar_negativos(self.muestra_de_inicializacion, individuo)
-        comite.entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
+            puntuaciones_imagenes = np.array(puntuaciones_imagenes)
+            puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
+            indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
+            positivos = []
+            for indice in indices_ordenados[:numero_positivos]:
+                positivos.append(secuencia[indice, :].reshape(1, -1))
+            indice = indices_ordenados[numero_positivos - 1]
+            positivos = np.vstack(positivos)
+            negativos = generar_negativos(self.muestra_de_inicializacion, individuo)
+            comite.entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
     
 
     def healing(self):
@@ -121,11 +123,30 @@ class Sistema():
 
 
     def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:
-        if min(puntuaciones_comites) < umbral_actualizacion:
-            prediccion = np.argmin(puntuaciones_comites)
-        else:
-            prediccion = -1
+        if funcion_decision_comite_ganador == "mayor_respuesta":
+            if min(puntuaciones_comites) < umbral_reconocimiento:
+                prediccion = np.argmin(puntuaciones_comites)
+            else:
+                prediccion = -1
+        elif funcion_decision_comite_ganador == "weibull":
+            puntuaciones_comites_ordenadas = np.sort(puntuaciones_comites)
+            mayores_respuestas = puntuaciones_comites_ordenadas[1:int(len(puntuaciones_comites_ordenadas)/2)]
+            mediana = np.median(puntuaciones_comites_ordenadas[1:])
+
+            distancia = np.abs(mayores_respuestas - mediana)
+            puntuacion_ganador = np.abs(puntuaciones_comites_ordenadas[0] - mediana)
+            
+            shape,_,escala = stats.weibull_min.fit(distancia, floc=0)
+            # Decision
+            if ( self.__weibull(puntuacion_ganador, escala, shape) < umbral_reconocimiento):
+                prediccion = np.argmin(puntuaciones_comites)
+            else:
+                prediccion = -1
+
         return prediccion
+
+    def __weibull(x,n,a):
+        return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
     def __presentar_secuencia(self, secuencia, comites: list[Comite]):
         puntuaciones_de_cada_comite = []
