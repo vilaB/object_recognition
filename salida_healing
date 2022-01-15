@@ -1,0 +1,810 @@
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  310
+		Aciertos sup:  312
+		Precision nosup:  0.6888888888888889
+		Precision sup:  0.6933333333333334
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  348
+		Aciertos sup:  359
+		Precision nosup:  0.7733333333333333
+		Precision sup:  0.7977777777777778
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  356
+		Aciertos sup:  386
+		Precision nosup:  0.7911111111111111
+		Precision sup:  0.8577777777777778
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  316
+		Aciertos sup:  383
+		Precision nosup:  0.7022222222222222
+		Precision sup:  0.8511111111111112
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  303
+		Aciertos sup:  392
+		Precision nosup:  0.6733333333333333
+		Precision sup:  0.8711111111111111
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  314
+		Aciertos sup:  392
+		Precision nosup:  0.6977777777777778
+		Precision sup:  0.8711111111111111
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  309
+		Aciertos sup:  401
+		Precision nosup:  0.6866666666666666
+		Precision sup:  0.8911111111111111
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  311
+		Aciertos sup:  400
+		Precision nosup:  0.6911111111111111
+		Precision sup:  0.8888888888888888
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  335
+		Aciertos sup:  409
+		Precision nosup:  0.7444444444444445
+		Precision sup:  0.9088888888888889
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  316
+		Aciertos sup:  309
+		Precision nosup:  0.7022222222222222
+		Precision sup:  0.6866666666666666
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  310
+		Aciertos sup:  312
+		Precision nosup:  0.6888888888888889
+		Precision sup:  0.6933333333333334
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  326
+		Aciertos sup:  343
+		Precision nosup:  0.7244444444444444
+		Precision sup:  0.7622222222222222
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  352
+		Aciertos sup:  374
+		Precision nosup:  0.7822222222222223
+		Precision sup:  0.8311111111111111
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  351
+		Aciertos sup:  398
+		Precision nosup:  0.78
+		Precision sup:  0.8844444444444445
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  338
+		Aciertos sup:  404
+		Precision nosup:  0.7511111111111111
+		Precision sup:  0.8977777777777778
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  337
+		Aciertos sup:  408
+		Precision nosup:  0.7488888888888889
+		Precision sup:  0.9066666666666666
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  335
+		Aciertos sup:  414
+		Precision nosup:  0.7444444444444445
+		Precision sup:  0.92
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  339
+		Aciertos sup:  416
+		Precision nosup:  0.7533333333333333
+		Precision sup:  0.9244444444444444
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  312
+		Aciertos sup:  315
+		Precision nosup:  0.6933333333333334
+		Precision sup:  0.7
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  342
+		Aciertos sup:  354
+		Precision nosup:  0.76
+		Precision sup:  0.7866666666666666
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  355
+		Aciertos sup:  386
+		Precision nosup:  0.7888888888888889
+		Precision sup:  0.8577777777777778
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  332
+		Aciertos sup:  390
+		Precision nosup:  0.7377777777777778
+		Precision sup:  0.8666666666666667
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  329
+		Aciertos sup:  394
+		Precision nosup:  0.7311111111111112
+		Precision sup:  0.8755555555555555
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  319
+		Aciertos sup:  399
+		Precision nosup:  0.7088888888888889
+		Precision sup:  0.8866666666666667
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  324
+		Aciertos sup:  406
+		Precision nosup:  0.72
+		Precision sup:  0.9022222222222223
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  329
+		Aciertos sup:  411
+		Precision nosup:  0.7311111111111112
+		Precision sup:  0.9133333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  331
+		Aciertos sup:  411
+		Precision nosup:  0.7355555555555555
+		Precision sup:  0.9133333333333333
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  328
+		Aciertos sup:  333
+		Precision nosup:  0.7288888888888889
+		Precision sup:  0.74
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  358
+		Aciertos sup:  349
+		Precision nosup:  0.7955555555555556
+		Precision sup:  0.7755555555555556
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  331
+		Aciertos sup:  383
+		Precision nosup:  0.7355555555555555
+		Precision sup:  0.8511111111111112
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  353
+		Aciertos sup:  393
+		Precision nosup:  0.7844444444444445
+		Precision sup:  0.8733333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  379
+		Aciertos sup:  403
+		Precision nosup:  0.8422222222222222
+		Precision sup:  0.8955555555555555
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  373
+		Aciertos sup:  408
+		Precision nosup:  0.8288888888888889
+		Precision sup:  0.9066666666666666
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  366
+		Aciertos sup:  409
+		Precision nosup:  0.8133333333333334
+		Precision sup:  0.9088888888888889
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  368
+		Aciertos sup:  411
+		Precision nosup:  0.8177777777777778
+		Precision sup:  0.9133333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  363
+		Aciertos sup:  414
+		Precision nosup:  0.8066666666666666
+		Precision sup:  0.92
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  249
+		Aciertos sup:  247
+		Precision nosup:  0.5533333333333333
+		Precision sup:  0.5488888888888889
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  254
+		Aciertos sup:  246
+		Precision nosup:  0.5644444444444444
+		Precision sup:  0.5466666666666666
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  231
+		Aciertos sup:  336
+		Precision nosup:  0.5133333333333333
+		Precision sup:  0.7466666666666667
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  230
+		Aciertos sup:  346
+		Precision nosup:  0.5111111111111111
+		Precision sup:  0.7688888888888888
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  248
+		Aciertos sup:  362
+		Precision nosup:  0.5511111111111111
+		Precision sup:  0.8044444444444444
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  256
+		Aciertos sup:  376
+		Precision nosup:  0.5688888888888889
+		Precision sup:  0.8355555555555556
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  251
+		Aciertos sup:  382
+		Precision nosup:  0.5577777777777778
+		Precision sup:  0.8488888888888889
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  254
+		Aciertos sup:  383
+		Precision nosup:  0.5644444444444444
+		Precision sup:  0.8511111111111112
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  262
+		Aciertos sup:  397
+		Precision nosup:  0.5822222222222222
+		Precision sup:  0.8822222222222222
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  276
+		Aciertos sup:  291
+		Precision nosup:  0.6133333333333333
+		Precision sup:  0.6466666666666666
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  331
+		Aciertos sup:  318
+		Precision nosup:  0.7355555555555555
+		Precision sup:  0.7066666666666667
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  327
+		Aciertos sup:  333
+		Precision nosup:  0.7266666666666667
+		Precision sup:  0.74
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  331
+		Aciertos sup:  372
+		Precision nosup:  0.7355555555555555
+		Precision sup:  0.8266666666666667
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  325
+		Aciertos sup:  385
+		Precision nosup:  0.7222222222222222
+		Precision sup:  0.8555555555555555
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  314
+		Aciertos sup:  389
+		Precision nosup:  0.6977777777777778
+		Precision sup:  0.8644444444444445
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  325
+		Aciertos sup:  395
+		Precision nosup:  0.7222222222222222
+		Precision sup:  0.8777777777777778
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  327
+		Aciertos sup:  394
+		Precision nosup:  0.7266666666666667
+		Precision sup:  0.8755555555555555
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  332
+		Aciertos sup:  395
+		Precision nosup:  0.7377777777777778
+		Precision sup:  0.8777777777777778
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  323
+		Aciertos sup:  324
+		Precision nosup:  0.7177777777777777
+		Precision sup:  0.72
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  357
+		Aciertos sup:  357
+		Precision nosup:  0.7933333333333333
+		Precision sup:  0.7933333333333333
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  339
+		Aciertos sup:  391
+		Precision nosup:  0.7533333333333333
+		Precision sup:  0.8688888888888889
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  340
+		Aciertos sup:  414
+		Precision nosup:  0.7555555555555555
+		Precision sup:  0.92
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  339
+		Aciertos sup:  416
+		Precision nosup:  0.7533333333333333
+		Precision sup:  0.9244444444444444
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  353
+		Aciertos sup:  406
+		Precision nosup:  0.7844444444444445
+		Precision sup:  0.9022222222222223
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  348
+		Aciertos sup:  410
+		Precision nosup:  0.7733333333333333
+		Precision sup:  0.9111111111111111
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  344
+		Aciertos sup:  409
+		Precision nosup:  0.7644444444444445
+		Precision sup:  0.9088888888888889
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  344
+		Aciertos sup:  409
+		Precision nosup:  0.7644444444444445
+		Precision sup:  0.9088888888888889
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  255
+		Aciertos sup:  241
+		Precision nosup:  0.5666666666666667
+		Precision sup:  0.5355555555555556
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  297
+		Aciertos sup:  251
+		Precision nosup:  0.66
+		Precision sup:  0.5577777777777778
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  254
+		Aciertos sup:  306
+		Precision nosup:  0.5644444444444444
+		Precision sup:  0.68
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  252
+		Aciertos sup:  310
+		Precision nosup:  0.56
+		Precision sup:  0.6888888888888889
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  274
+		Aciertos sup:  367
+		Precision nosup:  0.6088888888888889
+		Precision sup:  0.8155555555555556
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  266
+		Aciertos sup:  376
+		Precision nosup:  0.5911111111111111
+		Precision sup:  0.8355555555555556
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  293
+		Aciertos sup:  381
+		Precision nosup:  0.6511111111111111
+		Precision sup:  0.8466666666666667
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  290
+		Aciertos sup:  391
+		Precision nosup:  0.6444444444444445
+		Precision sup:  0.8688888888888889
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  291
+		Aciertos sup:  382
+		Precision nosup:  0.6466666666666666
+		Precision sup:  0.8488888888888889
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  278
+		Aciertos sup:  296
+		Precision nosup:  0.6177777777777778
+		Precision sup:  0.6577777777777778
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  317
+		Aciertos sup:  327
+		Precision nosup:  0.7044444444444444
+		Precision sup:  0.7266666666666667
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  317
+		Aciertos sup:  330
+		Precision nosup:  0.7044444444444444
+		Precision sup:  0.7333333333333333
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  321
+		Aciertos sup:  333
+		Precision nosup:  0.7133333333333334
+		Precision sup:  0.74
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  324
+		Aciertos sup:  374
+		Precision nosup:  0.72
+		Precision sup:  0.8311111111111111
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  322
+		Aciertos sup:  386
+		Precision nosup:  0.7155555555555555
+		Precision sup:  0.8577777777777778
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  330
+		Aciertos sup:  397
+		Precision nosup:  0.7333333333333333
+		Precision sup:  0.8822222222222222
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  336
+		Aciertos sup:  393
+		Precision nosup:  0.7466666666666667
+		Precision sup:  0.8733333333333333
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  335
+		Aciertos sup:  404
+		Precision nosup:  0.7444444444444445
+		Precision sup:  0.8977777777777778
+FIN EXPERIMENTO
+[-----------]
+INICIO EXPERIMENTO
+Construcción del sistema en curso...
+Construcción del sistema finalizada.
+Los parámetros del sistema son: 
+	- Número de positivos (creación SVM):  25
+	- Número de negativos (creación SVM):  100
+	- Umbral de actualización:  inf
+	- Función de FDR:  percentil
+	- Percentil de FDR:  0.16
+	- Función de SDR:  mediana
+	- Percentil de SDR:  0.25
+	- Tamaño máximo de comité:  18
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  350
+		Aciertos sup:  333
+		Precision nosup:  0.7777777777777778
+		Precision sup:  0.74
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  357
+		Aciertos sup:  364
+		Precision nosup:  0.7933333333333333
+		Precision sup:  0.8088888888888889
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  372
+		Aciertos sup:  373
+		Precision nosup:  0.8266666666666667
+		Precision sup:  0.8288888888888889
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  373
+		Aciertos sup:  393
+		Precision nosup:  0.8288888888888889
+		Precision sup:  0.8733333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  347
+		Aciertos sup:  402
+		Precision nosup:  0.7711111111111111
+		Precision sup:  0.8933333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  339
+		Aciertos sup:  402
+		Precision nosup:  0.7533333333333333
+		Precision sup:  0.8933333333333333
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  350
+		Aciertos sup:  405
+		Precision nosup:  0.7777777777777778
+		Precision sup:  0.9
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  347
+		Aciertos sup:  413
+		Precision nosup:  0.7711111111111111
+		Precision sup:  0.9177777777777778
+No se puede eliminar el primer miembro del comite
+No se puede eliminar el primer miembro del comite
+	CICLO COMPLETADO
+		Secuencias evaluadas:  450
+		Aciertos nosup:  346
+		Aciertos sup:  417
+		Precision nosup:  0.7688888888888888
+		Precision sup:  0.9266666666666666
+FIN EXPERIMENTO

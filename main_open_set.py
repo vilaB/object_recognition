@@ -35,7 +35,7 @@ def experimento():
     test = dataset[9:]
     res_nosup, res_sup, open_set_nosup, open_set_sup = [], [], [], []
 
-    nosup, sup, open_uns, open_sup = fase_test(sistema, test)
+    nosup, sup, open_uns, open_sup = fase_test(sistema, test, desconocidos)
     res_nosup.append(nosup)
     res_sup.append(sup)
     open_set_nosup.append(open_uns)
@@ -44,9 +44,11 @@ def experimento():
     for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
         # Fase Entrenamiento
         for individuo, secuencia in enumerate(escena):
-            for desconocido in desconocidos: 
-                if desconocido < individuo:
-                    individuo -= 1
+            if individuo in desconocidos: individuo = -1
+            else:
+                for desconocido in desconocidos: 
+                    if desconocido < individuo:
+                        individuo -= 1
             secuencias = np.array_split(secuencia, num_subsecuencias)
             for secuencia in secuencias:
                 sistema.entrenar(secuencia, individuo)

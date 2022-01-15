@@ -5,7 +5,7 @@ from scipy import stats
 
 numero_positivos=25
 numero_negativos=100
-umbral_reconocimiento=np.inf
+umbral_reconocimiento=0.1
 funcion_FDR = 'percentil'       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = 'mediana'            # Función a nivel de secuencia
@@ -14,8 +14,8 @@ tamano_maximo_comite = 18
 funcion_decision_comite_ganador = 'weibull'   # Mayor respuesta o weibull
 
 class Sistema():
-    comites_no_supervisados: list[Comite] = None
-    comites_supervisados: list[Comite] = None 
+    comites_no_supervisados: list = None
+    comites_supervisados: list = None 
     muestra_de_inicializacion = None
 
     def __init__(self, muestra_de_inicializacion: list):
@@ -39,6 +39,7 @@ class Sistema():
         print("\t- Función de SDR: ", modo_SDR)
         print("\t- Percentil de SDR: ", percentil_SDR)
         print("\t- Tamaño máximo de comité: ", tamano_maximo_comite)
+        print("\t- Función de decisión del comité ganador: ", funcion_decision_comite_ganador)
 
     
     # str method
@@ -89,7 +90,8 @@ class Sistema():
             positivos = np.vstack(positivos)
             negativos = generar_negativos(self.muestra_de_inicializacion, prediccion)
             self.comites_no_supervisados[prediccion].entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
-            return prediccion
+        return prediccion
+        
     
 
     def entrenamiento_supervisado(self, secuencia: list, individuo: int):
@@ -145,10 +147,10 @@ class Sistema():
 
         return prediccion
 
-    def __weibull(x,n,a):
+    def __weibull(self, x,n,a):
         return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
-    def __presentar_secuencia(self, secuencia, comites: list[Comite]):
+    def __presentar_secuencia(self, secuencia, comites: list):
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for comite in comites:
