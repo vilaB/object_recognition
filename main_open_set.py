@@ -20,7 +20,9 @@ def metricas_open_set(resultados: dict):
 
 def elegir_desconocidos(objetos: list, porcentaje: float):
     num_desconocidos = int(len(objetos)*porcentaje)
-    return random.sample(range(0, 50), num_desconocidos).sort(reverse=True)
+    lst = random.sample(range(0, 50), num_desconocidos)
+    lst.sort(reverse=True)
+    return lst
 
 
 def experimento():
