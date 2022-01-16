@@ -7,5 +7,9 @@ class FUNCION_FDR:
 
 class FUNCION_SDR:
     PERCENTIL = "percentil"
-    MEDIA = "media"
+    MEDIANA = "mediana"
+
+
+class FUNCION_DECISION_COMITE_GANADOR:
     EL_MEJOR = "el mejor"
+    WEIBULL = "weibull"

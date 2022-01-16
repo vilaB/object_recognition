@@ -15,7 +15,7 @@ porcentaje_desconocidos = 0.2
 identificador = uuid.uuid4()
 
 def metricas_open_set(resultados: dict):
-    return f"\t{resultados['positivo-positivo']}\t{resultados['positivo-negativo']}\t{resultados['negativo-positivo']}\t{resultados['negativo-negativo']}"
+    return f"\t{resultados['positivo-positivo']}\t{resultados['positivo-negativo']}\t{resultados['negativo-positivo']}\t{resultados['negativo-negativo']}\t{resultados['positivos-fallados']}"
 
 
 def elegir_desconocidos(objetos: list, porcentaje: float):
@@ -72,8 +72,8 @@ def fase_test(sistema: Sistema, test: list, desconocidos: list = None):
     aciertos_sup = 0
 
     # Para la matriz de OpenSet
-    open_set_sup =   {'positivo-positivo': 0, 'positivo-negativo': 0, 'negativo-positivo': 0, 'negativo-negativo': 0}       # original-prediccion
-    open_set_nosup = {'positivo-positivo': 0, 'positivo-negativo': 0, 'negativo-positivo': 0, 'negativo-negativo': 0}
+    open_set_sup =   {'positivo-positivo': 0, 'positivo-negativo': 0, 'negativo-positivo': 0, 'negativo-negativo': 0, 'positivos-fallados': 0}       # original-prediccion
+    open_set_nosup = {'positivo-positivo': 0, 'positivo-negativo': 0, 'negativo-positivo': 0, 'negativo-negativo': 0, 'positivos-fallados': 0}
     for num_escena in range(len(test)):
         for individuo, secuencia_entrenamiento in enumerate(test[num_escena]):
             for desconocido in desconocidos: 
@@ -82,18 +82,32 @@ def fase_test(sistema: Sistema, test: list, desconocidos: list = None):
             secuencias = np.array_split(secuencia_entrenamiento, num_subsecuencias)
             for secuencia in secuencias:
                 secuencias_evaluadas +=1
-                acierto_nosup, acierto_sup = sistema.test(secuencia, individuo)
+                prediccion_nosup, prediccion_sup = sistema.test(secuencia)
+                acierto_nosup = prediccion_nosup == individuo
+                acierto_sup = prediccion_sup == individuo
                 if desconocidos is not None:
                     if individuo in desconocidos:
+                        # No supervisado
                         if acierto_nosup: open_set_nosup['negativo-negativo'] += 1
                         else: open_set_nosup['negativo-positivo'] += 1
+                        # Supervisado
                         if acierto_sup: open_set_sup['negativo-negativo'] += 1
                         else: open_set_sup['negativo-positivo'] += 1
                     else:
+                        # No supervisado
                         if acierto_nosup: open_set_nosup['positivo-positivo'] += 1
-                        else: open_set_nosup['positivo-negativo'] += 1
+                        else:
+                            if prediccion_nosup >= 0:
+                                open_set_nosup['positivos-fallados'] += 1
+                            else: 
+                                open_set_nosup['positivo-negativo'] += 1
+                        # Supervisado
                         if acierto_sup: open_set_sup['positivo-positivo'] += 1
-                        else: open_set_sup['positivo-negativo'] += 1
+                        else:
+                            if prediccion_sup >= 0:
+                                open_set_sup['positivos-fallados'] += 1
+                            else: 
+                                open_set_sup['positivo-negativo'] += 1
                 aciertos_nosup += acierto_nosup
                 aciertos_sup += acierto_sup
     print("\tCICLO COMPLETADO")

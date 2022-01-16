@@ -6,12 +6,17 @@ modo_limitacion = 'div_1'
 
 class Comite():
     miembros: list = None
+    nombre: str = None
 
     def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, supervisado: bool = False) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
         self.miembros.append({'clasificador': svm, 'positivos': positivos})
+
+    
+    def __str__(self) -> str:
+        return self.nombre
 
     
     def entrenamiento(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int) -> None:

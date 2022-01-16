@@ -1,24 +1,26 @@
+import enum
 from sistema.comite import Comite
 import numpy as np
 import statistics
 from scipy import stats
+from constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
 numero_positivos=25
 numero_negativos=100
 umbral_reconocimiento=0.1
-funcion_FDR = 'percentil'       # Función a nivel de comité
+funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
 percentil_FDR = 0.16            
-modo_SDR = 'mediana'            # Función a nivel de secuencia
+modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
 percentil_SDR = 0.25
 tamano_maximo_comite = 18
-funcion_decision_comite_ganador = 'weibull'   # Mayor respuesta o weibull
+funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR   # Mayor respuesta o weibull
 
 class Sistema():
     comites_no_supervisados: list = None
     comites_supervisados: list = None 
     muestra_de_inicializacion = None
 
-    def __init__(self, muestra_de_inicializacion: list):
+    def __init__(self, muestra_de_inicializacion: list, nombres_comites: list = None):
         print("Construcción del sistema en curso...")
         self.muestra_de_inicializacion = muestra_de_inicializacion
         self.comites_no_supervisados = []
@@ -29,6 +31,12 @@ class Sistema():
             comite_supervisado = Comite(positivos=muestra_de_inicializacion[individuo], negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos)
             self.comites_no_supervisados.append(comite_no_supervisado)
             self.comites_supervisados.append(comite_supervisado)
+        if nombres_comites is not None:
+            if len(muestra_de_inicializacion) != len(nombres_comites):
+                raise Exception("El número de nombres de comité no coincide con el número de individuos pasado en la muestra de inicialización.")
+            for i, nombre in enumerate(nombres_comites):
+                self.comites_no_supervisados[i].nombre = nombre
+                self.comites_supervisados[i].nombre = nombre
         print("Construcción del sistema finalizada.")
         print("Los parámetros del sistema son: ")
         print("\t- Número de positivos (creación SVM): ", numero_positivos)
@@ -57,13 +65,13 @@ class Sistema():
             """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite)
 
 
-    def test(self, secuencia: list, individuo: int):
+    def test(self, secuencia: list):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados)
 
         puntuaciones_comites_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_supervisados)
         prediccion_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_supervisados)
-        return prediccion_no_supervisados == individuo, prediccion_supervisados == individuo
+        return prediccion_no_supervisados, prediccion_supervisados
 
 
     def entrenar(self, secuencia: list, individuo: int):
@@ -125,12 +133,12 @@ class Sistema():
 
 
     def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:
-        if funcion_decision_comite_ganador == "mayor_respuesta":
+        if funcion_decision_comite_ganador == FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR:
             if min(puntuaciones_comites) < umbral_reconocimiento:
                 prediccion = np.argmin(puntuaciones_comites)
             else:
                 prediccion = -1
-        elif funcion_decision_comite_ganador == "weibull":
+        elif funcion_decision_comite_ganador == FUNCION_DECISION_COMITE_GANADOR.WEIBULL:
             puntuaciones_comites_ordenadas = np.sort(puntuaciones_comites)
             mayores_respuestas = puntuaciones_comites_ordenadas[1:int(len(puntuaciones_comites_ordenadas)/2)]
             mediana = np.median(puntuaciones_comites_ordenadas[1:])
@@ -164,16 +172,16 @@ class Sistema():
     
     # Función a nivel de comité (obtener una puntuación por imagen)
     def __FDR(self, puntuaciones_de_un_comite):
-        if funcion_FDR == 'mediana':     puntuaciones_imagenes = np.median(puntuaciones_de_un_comite, axis=0)
-        elif funcion_FDR == "percentil": puntuaciones_imagenes = np.quantile(puntuaciones_de_un_comite, percentil_FDR, axis=0)
-        elif funcion_FDR == "el mejor":  puntuaciones_imagenes = np.min(puntuaciones_de_un_comite, axis=0)
+        if funcion_FDR == FUNCION_FDR.MEDIANA:     puntuaciones_imagenes = np.median(puntuaciones_de_un_comite, axis=0)
+        elif funcion_FDR == FUNCION_FDR.PERCENTIL: puntuaciones_imagenes = np.quantile(puntuaciones_de_un_comite, percentil_FDR, axis=0)
+        elif funcion_FDR == FUNCION_FDR.EL_MEJOR:  puntuaciones_imagenes = np.min(puntuaciones_de_un_comite, axis=0)
         return puntuaciones_imagenes
     
 
     # Función a nivel de secuencia (obtener una puntuación por comité)
     def __SDR(self, puntuaciones_imagenes):
-        if modo_SDR == 'mediana':      puntuacion_comite = statistics.median(puntuaciones_imagenes)
-        elif modo_SDR == 'percentil':  puntuacion_comite = np.quantile(puntuaciones_imagenes, percentil_SDR)
+        if modo_SDR == FUNCION_SDR.MEDIANA:      puntuacion_comite = statistics.median(puntuaciones_imagenes)
+        elif modo_SDR == FUNCION_SDR.PERCENTIL:  puntuacion_comite = np.quantile(puntuaciones_imagenes, percentil_SDR)
         return puntuacion_comite
 
 

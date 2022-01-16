@@ -47,9 +47,9 @@ def fase_test(sistema: Sistema, test: list):
             secuencias = np.array_split(secuencia_entrenamiento, num_subsecuencias)
             for secuencia in secuencias:
                 secuencias_evaluadas +=1
-                acierto_nosup, acierto_sup = sistema.test(secuencia, individuo)
-                aciertos_nosup += acierto_nosup
-                aciertos_sup += acierto_sup
+                prediccion_nosup, prediccion_sup = sistema.test(secuencia)
+                aciertos_nosup += prediccion_nosup == individuo
+                aciertos_sup += prediccion_sup == individuo
     print("\tCICLO COMPLETADO")
     print("\t\tSecuencias evaluadas: ", secuencias_evaluadas)
     print("\t\tAciertos nosup: ", aciertos_nosup)
