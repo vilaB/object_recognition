@@ -15,7 +15,7 @@ porcentaje_desconocidos = 0.2
 identificador = uuid.uuid4()
 
 def metricas_open_set(resultados: dict):
-    return f"\t{resultados['positivo-positivo']}\t{resultados['positivo-negativo']}\t{resultados['negativo-positivo']}\t{resultados['negativo-negativo']}\t{resultados['positivos-fallados']}"
+    return f"\t\t{resultados['positivo-positivo']}\t{resultados['positivo-negativo']}\t{resultados['negativo-positivo']}\t{resultados['negativo-negativo']}\t{resultados['positivos-fallados']}"
 
 
 def elegir_desconocidos(objetos: list, porcentaje: float):
@@ -179,12 +179,23 @@ f = open(str(identificador) + "resultados_open_set.txt", "w")
 for i, exp in enumerate(resultados_open_set):
     no_sup, sup = exp
     f.write(f'EXPERIMENTO {i} \n')
-    f.write("\t++ +- -+ --" + "\n")
+    f.write("\tNO SUPERVISADO" + "\n")
+    f.write("\t\t++ +- -+ --" + "\n")
     for test in no_sup:
-        f.write(metricas_open_set(test))
-    f.write("\t++ +- -+ --" + "\n")
+        f.write(metricas_open_set(test) + '\n')
+    f.write("\tSUPERVISADO" + "\n")
+    f.write("\t\t++ +- -+ --" + "\n")
     for test in sup:
-        f.write(metricas_open_set(test))
+        f.write(metricas_open_set(test) + '\n')
+    f.write("\n\n")
+f.write("\tRESUMEN\n")
+for exp in resultados_open_set:
+    no_sup, sup = exp
+    no_sup = no_sup[-1]
+    sup = sup[-1]
+    f.write(metricas_open_set(no_sup) + '\t\t')
+    f.write(metricas_open_set(sup) + '\n')
+    
 
 f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 f.write("\n" + str(sistema))
