@@ -3,7 +3,7 @@ from sistema.comite import Comite
 import numpy as np
 import statistics
 from scipy import stats
-from constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
+from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
 numero_positivos=25
 numero_negativos=100
