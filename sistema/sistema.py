@@ -3,7 +3,7 @@ from sistema.comite import Comite
 import numpy as np
 import statistics
 from scipy import stats
-from constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
+from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
 numero_positivos=25
 numero_negativos=100
@@ -62,7 +62,8 @@ class Sistema():
             - Función de SDR: {}
             - Percentil de SDR: {}
             - Tamaño máximo de comité: {}
-            """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite)
+            - Función de decisión del comité ganador: {}
+            """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador)
 
 
     def test(self, secuencia: list):
