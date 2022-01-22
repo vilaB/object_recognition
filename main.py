@@ -4,7 +4,7 @@ import numpy as np
 import uuid
 import datetime
 
-num_subsecuencias = 6
+num_subsecuencias = 10
 resultados_nosup = []
 resultados_sup = []
 

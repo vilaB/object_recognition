@@ -7,7 +7,7 @@ from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE
 
 numero_positivos=25
 numero_negativos=100
-umbral_reconocimiento=0.1
+umbral_reconocimiento=np.inf              # np.inf para closed set!!
 funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
