@@ -5,7 +5,7 @@ import uuid
 import datetime
 import random
 
-num_subsecuencias = 3
+num_subsecuencias = 10
 resultados_nosup = []
 resultados_sup = []
 resultados_open_set = []
@@ -13,6 +13,7 @@ resultados_open_set = []
 porcentaje_desconocidos = 0.2
 
 identificador = uuid.uuid4()
+print("IDENTIFICADOR: " + str(identificador))
 
 def metricas_open_set(resultados: dict):
     return f"\t\t{resultados['positivo-positivo']}\t{resultados['positivo-negativo']}\t{resultados['negativo-positivo']}\t{resultados['negativo-negativo']}\t{resultados['positivos-fallados']}"

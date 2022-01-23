@@ -9,6 +9,7 @@ resultados_nosup = []
 resultados_sup = []
 
 identificador = uuid.uuid4()
+print("IDENTIFICADOR: " + str(identificador))
 
 def experimento():
     print("INICIO EXPERIMENTO")
