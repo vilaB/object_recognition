@@ -90,7 +90,7 @@ class Sistema():
         if prediccion >= 0:
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
+            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
             indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
             positivos = []
             for indice in indices_ordenados[:numero_positivos]:
@@ -110,7 +110,7 @@ class Sistema():
             puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
 
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
+            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
             indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
             positivos = []
             for indice in indices_ordenados[:numero_positivos]:
