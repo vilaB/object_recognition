@@ -68,7 +68,7 @@ class Sistema():
 
     def test(self, secuencia: list):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
-        prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados)
+        prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) # TODO: marcar que comité gana en el archivo correspondiente
 
         puntuaciones_comites_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_supervisados)
         prediccion_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_supervisados)

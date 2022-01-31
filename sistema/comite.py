@@ -8,11 +8,12 @@ class Comite():
     miembros: list = None
     nombre: str = None
 
-    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, supervisado: bool = False) -> None:
+    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
         self.miembros.append({'clasificador': svm, 'positivos': positivos})
+        self.nombre = nombre
 
     
     def __str__(self) -> str:
@@ -25,11 +26,13 @@ class Comite():
         self.miembros.append({'clasificador': svm, 'positivos': positivos})
     
 
-    def procesar_secuencia(self, secuencia: list) -> list:
+    def procesar_secuencia(self, secuencia: list, test: bool = False) -> list:
         matriz_puntuaciones = []
         for miembro in self.miembros:
             prediccion = miembro['clasificador'].procesar_imagen(secuencia)
             matriz_puntuaciones.append(prediccion)                          # Cada fila son las predicciones de un miembro, cada columna es una imagen
+        if test:
+            x = 1 # TODO: guardar los resultados del comité que debería de ganar
         return matriz_puntuaciones
 
     
