@@ -10,11 +10,14 @@ resultados_sup = []
 
 identificador = uuid.uuid4()
 print("IDENTIFICADOR: " + str(identificador))
+num_experimento: int = 0
 
 def experimento():
     print("INICIO EXPERIMENTO")
     primera_escena_inicializacion = dataset[0]
-    sistema = Sistema(primera_escena_inicializacion)
+    global num_experimento
+    sistema = Sistema(primera_escena_inicializacion, nombre=identificador + "/" + str(num_experimento))
+    num_experimento += 1
     test = dataset[9:]
     res_nosup, res_sup = [], []
 

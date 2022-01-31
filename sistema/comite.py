@@ -5,7 +5,7 @@ from sistema.SVM import SVM
 modo_limitacion = 'div_1'
 
 class Comite():
-    miembros: list = None
+    miembros: list[SVM] = None
     nombre: str = None
 
     def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None) -> None:
@@ -32,7 +32,9 @@ class Comite():
             prediccion = miembro['clasificador'].procesar_imagen(secuencia)
             matriz_puntuaciones.append(prediccion)                          # Cada fila son las predicciones de un miembro, cada columna es una imagen
         if test:
-            x = 1 # TODO: guardar los resultados del comité que debería de ganar
+            f = open(self.nombre + '.txt', 'a')
+            clasificadores_ordenados = np.argmin(matriz_puntuaciones, axis=1)
+            f.write(str(clasificadores_ordenados) + '\n')
         return matriz_puntuaciones
 
     
