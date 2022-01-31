@@ -5,15 +5,15 @@ import statistics
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
-numero_positivos=25
+numero_positivos=10
 numero_negativos=100
-umbral_reconocimiento=0.1             # np.inf para closed set!!
+umbral_reconocimiento=np.inf            # np.inf para closed set!!
 funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
 percentil_SDR = 0.25
 tamano_maximo_comite = 18
-funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.WEIBULL   # Mayor respuesta o weibull
+funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR   # Mayor respuesta o weibull
 
 class Sistema():
     comites_no_supervisados: list = None
