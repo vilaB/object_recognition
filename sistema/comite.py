@@ -5,7 +5,7 @@ from sistema.SVM import SVM
 modo_limitacion = 'div_1'
 
 class Comite():
-    miembros: list[SVM] = None
+    miembros: list[dict[str, SVM | list]] = None
     nombre: str = None
 
     def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None) -> None:
