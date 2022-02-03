@@ -1,4 +1,3 @@
-import enum
 from sistema.comite import Comite
 import numpy as np
 import statistics
@@ -16,15 +15,17 @@ tamano_maximo_comite = 18
 funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR   # Mayor respuesta o weibull
 
 class Sistema():
-    comites_no_supervisados: list = None
-    comites_supervisados: list = None 
-    muestra_de_inicializacion = None
+    comites_no_supervisados: list[Comite] = None
+    comites_supervisados: list[Comite] = None 
+    muestra_de_inicializacion: list = None
+    nombre: str = None 
 
-    def __init__(self, muestra_de_inicializacion: list, nombres_comites: list = None):
+    def __init__(self, muestra_de_inicializacion: list, nombres_comites: list = None, nombre: str = None):
         print("Construcción del sistema en curso...")
         self.muestra_de_inicializacion = muestra_de_inicializacion
         self.comites_no_supervisados = []
         self.comites_supervisados = []
+        self.nombre = nombre + "/" if nombre else ""
         for individuo in range(len(muestra_de_inicializacion)):
             negativos = generar_negativos(muestra_de_inicializacion, individuo)
             comite_no_supervisado = Comite(positivos=muestra_de_inicializacion[individuo], negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos)
@@ -34,9 +35,13 @@ class Sistema():
         if nombres_comites is not None:
             if len(muestra_de_inicializacion) != len(nombres_comites):
                 raise Exception("El número de nombres de comité no coincide con el número de individuos pasado en la muestra de inicialización.")
-            for i, nombre in enumerate(nombres_comites):
-                self.comites_no_supervisados[i].nombre = nombre
-                self.comites_supervisados[i].nombre = nombre
+            for i, nombre_comite in enumerate(nombres_comites):
+                self.comites_no_supervisados[i].nombre = self.nombre + nombre_comite
+                self.comites_supervisados[i].nombre = self.nombre + nombre_comite
+        else:
+            for i in range(len(nombres_comites)):
+                self.comites_no_supervisados[i].nombre = self.nombre + i
+                self.comites_supervisados[i].nombre = self.nombre + i
         print("Construcción del sistema finalizada.")
         print("Los parámetros del sistema son: ")
         print("\t- Número de positivos (creación SVM): ", numero_positivos)
@@ -68,7 +73,7 @@ class Sistema():
 
     def test(self, secuencia: list):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
-        prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados)
+        prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) 
 
         puntuaciones_comites_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_supervisados)
         prediccion_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_supervisados)
@@ -90,7 +95,7 @@ class Sistema():
         if prediccion >= 0:
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
+            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
             indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
             positivos = []
             for indice in indices_ordenados[:numero_positivos]:
@@ -103,14 +108,14 @@ class Sistema():
         
     
 
-    def entrenamiento_supervisado(self, secuencia: list, individuo: int):
+    def entrenamiento_supervisado(self, secuencia: list[np.array], individuo: int):
         if individuo >= 0:
             comite = self.comites_supervisados[individuo]
             matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
             puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
 
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.array([abs(x) for x in puntuaciones_imagenes])
+            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
             indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
             positivos = []
             for indice in indices_ordenados[:numero_positivos]:
@@ -135,7 +140,7 @@ class Sistema():
 
     def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:
         if funcion_decision_comite_ganador == FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR:
-            if min(puntuaciones_comites) < umbral_reconocimiento:
+            if np.min(puntuaciones_comites) < umbral_reconocimiento:
                 prediccion = np.argmin(puntuaciones_comites)
             else:
                 prediccion = -1
@@ -159,7 +164,7 @@ class Sistema():
     def __weibull(self, x,n,a):
         return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
-    def __presentar_secuencia(self, secuencia, comites: list):
+    def __presentar_secuencia(self, secuencia, comites: list[Comite]):
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for comite in comites:
