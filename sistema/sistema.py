@@ -5,7 +5,7 @@ import statistics
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
-numero_positivos=10
+numero_positivos=5
 numero_negativos=100
 umbral_reconocimiento=np.inf            # np.inf para closed set!!
 funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
