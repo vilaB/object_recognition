@@ -39,9 +39,9 @@ class Sistema():
                 self.comites_no_supervisados[i].nombre = self.nombre + nombre_comite
                 self.comites_supervisados[i].nombre = self.nombre + nombre_comite
         else:
-            for i in range(len(nombres_comites)):
-                self.comites_no_supervisados[i].nombre = self.nombre + i
-                self.comites_supervisados[i].nombre = self.nombre + i
+            for i in range(len(muestra_de_inicializacion)):
+                self.comites_no_supervisados[i].nombre = self.nombre + str(i)
+                self.comites_supervisados[i].nombre = self.nombre + str(i)
         print("Construcción del sistema finalizada.")
         print("Los parámetros del sistema son: ")
         print("\t- Número de positivos (creación SVM): ", numero_positivos)
