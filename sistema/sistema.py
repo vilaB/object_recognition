@@ -169,7 +169,7 @@ class Sistema():
         puntuaciones_imagenes_de_comites = []
         for i, comite in enumerate(comites):
             if test: matriz_del_comite = comite.procesar_secuencia(secuencia, i == test)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
-            else: comite.procesar_secuencia(secuencia)
+            else: matriz_del_comite = comite.procesar_secuencia(secuencia)
             puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
             puntuaciones_imagenes_de_comites.append(puntuaciones_imagenes)
             puntuacion_del_comite = self.__SDR(puntuaciones_imagenes)
