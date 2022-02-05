@@ -40,10 +40,10 @@ class Comite():
     
     def marcar_miembro_para_eliminar(self, indice_miembro: int) -> None:
         if indice_miembro == 0:
-            print('No se puede eliminar el primer miembro del comite')
+            print('ERROR| No se puede eliminar el primer miembro del comite')
             return
         if indice_miembro == len(self.miembros) - 1:
-            print('Eliminando el ultimo miembro del comite')
+            print('AVISO| Eliminando el ultimo miembro del comite')
         self.miembros[indice_miembro]['eliminar'] = True
 
 
@@ -83,11 +83,11 @@ class Comite():
                 args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
                 to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
                 if 0 in to_pop:
-                    print("El primer clasificador no puede eliminarse por diversidad")
+                    print("NOTIFICACIÓN| El primer clasificador no puede eliminarse por diversidad")
                     to_pop.remove(0)
                     to_pop.append(args_to_pop[0, (tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
                 if len(self.miembros) - 1 in to_pop:
-                    print("Se está eliminando el clasificador que se acaba de introducir!")
+                    print("AVISO| Se está eliminando el clasificador que se acaba de introducir!")
                 
 
             to_pop = sorted(to_pop, reverse=True)
