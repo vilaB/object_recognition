@@ -4,7 +4,7 @@ import statistics
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 
-numero_positivos=5
+numero_positivos=10
 numero_negativos=100
 umbral_reconocimiento=np.inf            # np.inf para closed set!!
 funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
@@ -83,6 +83,8 @@ class Sistema():
     def entrenar(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False) -> int:
         if supervisar_no_supervisados:
             self.entrenamiento_supervisado(secuencia, individuo, self.comites_no_supervisados[individuo])
+            prediccion = individuo
+            print(f"INFO|\tSe ha supervisado la primera secuencia de tamaño {len(secuencia)} de la nueva escena para el comité {individuo}")
         else:
             prediccion = self.entrenamiento_no_supervisado(secuencia)
         if prediccion >= 0: 

@@ -8,8 +8,8 @@ num_subsecuencias = 15
 resultados_nosup = []
 resultados_sup = []
 
-identificador = uuid.uuid4()
-print("IDENTIFICADOR: " + str(identificador))
+identificador = str(uuid.uuid4())
+print("IDENTIFICADOR: " + identificador)
 num_experimento: int = 0
 
 def experimento():
