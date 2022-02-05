@@ -72,7 +72,7 @@ class Sistema():
 
 
     def test(self, secuencia: list, individuo: int = False):
-        puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados, individuo)
+        puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) 
 
         puntuaciones_comites_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_supervisados)
@@ -169,12 +169,11 @@ class Sistema():
     def __weibull(self, x,n,a):
         return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
-    def __presentar_secuencia(self, secuencia, comites: list[Comite], test: int = False) -> tuple:
+    def __presentar_secuencia(self, secuencia, comites: list[Comite]) -> tuple:
         puntuaciones_de_cada_comite = []
         puntuaciones_imagenes_de_comites = []
         for i, comite in enumerate(comites):
-            if test: matriz_del_comite = comite.procesar_secuencia(secuencia, i == test)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
-            else: matriz_del_comite = comite.procesar_secuencia(secuencia)
+            matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
             puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
             puntuaciones_imagenes_de_comites.append(puntuaciones_imagenes)
             puntuacion_del_comite = self.__SDR(puntuaciones_imagenes)
