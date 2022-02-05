@@ -3,6 +3,7 @@ from cargar_datos import cargar_CORe50
 import numpy as np
 import uuid
 import datetime
+import os
 
 num_subsecuencias = 30
 resultados_nosup = []
@@ -10,12 +11,14 @@ resultados_sup = []
 
 identificador = str(uuid.uuid4())
 print("IDENTIFICADOR: " + identificador)
+os.makedirs(identificador)
 num_experimento: int = 0
 
 def experimento():
     print("INICIO EXPERIMENTO")
     primera_escena_inicializacion = dataset[0]
     global num_experimento
+    os.makedirs(identificador + "/" + str(num_experimento))
     sistema = Sistema(primera_escena_inicializacion, nombre=identificador + "/" + str(num_experimento))
     num_experimento += 1
     test = dataset[9:]
@@ -51,7 +54,7 @@ def fase_test(sistema: Sistema, test: list):
             secuencias = np.array_split(secuencia_entrenamiento, num_subsecuencias)
             for secuencia in secuencias:
                 secuencias_evaluadas +=1
-                prediccion_nosup, prediccion_sup = sistema.test(secuencia)
+                prediccion_nosup, prediccion_sup = sistema.test(secuencia, individuo)
                 aciertos_nosup += prediccion_nosup == individuo
                 aciertos_sup += prediccion_sup == individuo
     print("\tCICLO COMPLETADO")
