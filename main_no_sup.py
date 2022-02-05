@@ -1,4 +1,3 @@
-from matplotlib.pyplot import table
 from sistema.sistema import Sistema
 from cargar_datos import cargar_CORe50
 import numpy as np
