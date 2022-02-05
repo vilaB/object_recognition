@@ -71,7 +71,7 @@ class Sistema():
             """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador)
 
 
-    def test(self, secuencia: list, individuo: int = False):
+    def test(self, secuencia: list):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) 
 

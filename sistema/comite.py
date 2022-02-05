@@ -42,6 +42,8 @@ class Comite():
         if indice_miembro == 0:
             print('No se puede eliminar el primer miembro del comite')
             return
+        if indice_miembro == len(self.miembros) - 1:
+            print('Eliminando el ultimo miembro del comite')
         self.miembros[indice_miembro]['eliminar'] = True
 
 
@@ -84,6 +86,8 @@ class Comite():
                     print("El primer clasificador no puede eliminarse por diversidad")
                     to_pop.remove(0)
                     to_pop.append(args_to_pop[0, (tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
+                if len(self.miembros) - 1 in to_pop:
+                    print("Se está eliminando el clasificador que se acaba de introducir!")
                 
 
             to_pop = sorted(to_pop, reverse=True)

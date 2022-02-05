@@ -1,8 +1,14 @@
+from matplotlib.pyplot import table
 from sistema.sistema import Sistema
 from cargar_datos import cargar_CORe50
 import numpy as np
 import uuid
 import datetime
+try: 
+    from Table.table import Tabla
+    FANCY_PRINTING = True
+except:
+    FANCY_PRINTING = False
 
 num_subsecuencias = 15
 resultados_nosup = []
@@ -14,6 +20,8 @@ num_experimento: int = 0
 
 def experimento():
     print("INICIO EXPERIMENTO")
+    if FANCY_PRINTING:
+        tabla = Tabla()
     primera_escena_inicializacion = dataset[0]
     global num_experimento
     sistema = Sistema(primera_escena_inicializacion, nombre=identificador + "/" + str(num_experimento))
@@ -32,7 +40,7 @@ def experimento():
             for i, secuencia in enumerate(secuencias):
                 sistema.entrenar(secuencia, individuo, i == 0)
         sistema.healing()
-        nosup, sup = fase_test(sistema, test)
+        nosup, sup = fase_test(sistema, test, tabla)
         res_nosup.append(nosup)
         res_sup.append(sup)
     print("FIN EXPERIMENTO")
@@ -41,7 +49,7 @@ def experimento():
     return sistema
 
 
-def fase_test(sistema: Sistema, test: list):
+def fase_test(sistema: Sistema, test: list, tabla: Tabla = None):
     # Fase Test
     secuencias_evaluadas = 0
     aciertos_nosup = 0
@@ -54,12 +62,15 @@ def fase_test(sistema: Sistema, test: list):
                 prediccion_nosup, prediccion_sup = sistema.test(secuencia)
                 aciertos_nosup += prediccion_nosup == individuo
                 aciertos_sup += prediccion_sup == individuo
-    print("\tCICLO COMPLETADO")
-    print("\t\tSecuencias evaluadas: ", secuencias_evaluadas)
-    print("\t\tAciertos nosup: ", aciertos_nosup)
-    print("\t\tAciertos sup: ", aciertos_sup)
-    print("\t\tPrecision nosup: ", float(aciertos_nosup)/secuencias_evaluadas)
-    print("\t\tPrecision sup: ", float(aciertos_sup)/secuencias_evaluadas)
+    if not FANCY_PRINTING:
+        print("\tCICLO COMPLETADO")
+        print("\t\tSecuencias evaluadas: ", secuencias_evaluadas)
+        print("\t\tAciertos nosup: ", aciertos_nosup)
+        print("\t\tAciertos sup: ", aciertos_sup)
+        print("\t\tPrecision nosup: ", float(aciertos_nosup)/secuencias_evaluadas)
+        print("\t\tPrecision sup: ", float(aciertos_sup)/secuencias_evaluadas)
+    else:
+        tabla.imprimir_resultados(secuencias_evaluadas=secuencias_evaluadas, aciertos_nosup=aciertos_sup, aciertos_sup=aciertos_sup)
     return  round(float(aciertos_nosup)/secuencias_evaluadas, 4), round(float(aciertos_sup)/secuencias_evaluadas, 4)
 
 
