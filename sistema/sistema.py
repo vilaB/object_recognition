@@ -80,9 +80,14 @@ class Sistema():
         return prediccion_no_supervisados, prediccion_supervisados
 
 
-    def entrenar(self, secuencia: list, individuo: int):
-        prediccion = self.entrenamiento_no_supervisado(secuencia)
-        if prediccion >= 0: self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
+    def entrenar(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False) -> int:
+        if supervisar_no_supervisados:
+            self.entrenamiento_supervisado(secuencia, individuo, self.comites_no_supervisados[individuo])
+        else:
+            prediccion = self.entrenamiento_no_supervisado(secuencia)
+        if prediccion >= 0: 
+            self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
+        
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
 
@@ -108,9 +113,9 @@ class Sistema():
         
     
 
-    def entrenamiento_supervisado(self, secuencia: list[np.array], individuo: int):
+    def entrenamiento_supervisado(self, secuencia: list[np.array], individuo: int, comite: Comite = None):
         if individuo >= 0:
-            comite = self.comites_supervisados[individuo]
+            if comite is None: comite = self.comites_supervisados[individuo]
             matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
             puntuaciones_imagenes = self.__FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
 
