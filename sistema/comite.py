@@ -5,14 +5,14 @@ from sistema.SVM import SVM
 modo_limitacion = 'div_1'
 
 class Comite():
-    miembros: list[dict[str, SVM | list ]] = None
+    miembros: list[dict[str, SVM | list | int ]] = None
     nombre: str = None
 
     def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
-        self.miembros.append({'clasificador': svm, 'positivos': positivos})
+        self.miembros.append({'clasificador': svm, 'positivos': positivos, "veces": 0, "veces_util": 0})                                # TODO: esto tiene que ser un tipo propio
         self.nombre = nombre
 
     
@@ -30,8 +30,40 @@ class Comite():
         matriz_puntuaciones = []
         for miembro in self.miembros:
             prediccion = miembro['clasificador'].procesar_imagen(secuencia)
+            miembro['ultimas_predicciones'] = prediccion
             matriz_puntuaciones.append(prediccion)                          # Cada fila son las predicciones de un miembro, cada columna es una imagen
         return matriz_puntuaciones
+
+
+    def establecer_utilidad(self, puntuacion: float):
+        for miembro in self.miembros:
+            miembro["veces_util"] += np.where(miembro['ultimas_predicciones'] < puntuacion).sum()
+            miembro["veces"] += len(miembro['ultimas_predicciones'])
+    
+    def purgar_comite_por_utilidad(self, tamano: int) -> None:
+        if len(self.miembros) > tamano:
+            utilidades = []
+            for miembro in self.miembros:
+                miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
+                if miembro["veces"] >= 100:                                                         # TODO: poner en variable
+                    utilidades.append(miembro["utilidad"])
+            utilidad_media = np.mean(utilidades)
+
+            to_pop = []
+            for i, miembro in enumerate(self.miembros):
+                if miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
+                    to_pop.append(i)
+            for i in reversed(to_pop):
+                self.miembros.pop(i)
+
+            if len(self.miembros) > tamano:
+                utilidad_mas_baja = 1
+                for i, miembro in enumerate(self.miembros):
+                    if utilidad_mas_baja > miembro['utilidad']:
+                        utilidad_mas_baja = miembro['utilidad']
+                        indice_mas_baja = i
+                self.miembros.pop(indice_mas_baja)
+        
 
     
     def obtener_positivos(self) -> list:

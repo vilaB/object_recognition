@@ -88,7 +88,7 @@ class Sistema():
         else:
             prediccion = self.entrenamiento_no_supervisado(secuencia)
         if prediccion >= 0: 
-            self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
+            self.comites_no_supervisados[prediccion].purgar_comite_por_utilidad(tamano_maximo_comite) # self.muestra_de_inicializacion
         
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
@@ -98,6 +98,7 @@ class Sistema():
         # Predicción por parte del sistema no supervisado
         puntuaciones_comites, puntuaciones_imagenes_de_comites = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion = self.__funcion_decision_comite_ganador(puntuaciones_comites)
+        puntuacion_ganadora = puntuaciones_comites[prediccion]
 
         if prediccion >= 0:
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
@@ -111,6 +112,9 @@ class Sistema():
             positivos = np.vstack(positivos)
             negativos = generar_negativos(self.muestra_de_inicializacion, prediccion)
             self.comites_no_supervisados[prediccion].entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
+
+            # Para medición de utilidad
+            self.comites_no_supervisados[prediccion].establecer_utilidad(puntuacion_ganadora)
         return prediccion
         
     
