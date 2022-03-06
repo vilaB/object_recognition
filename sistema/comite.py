@@ -1,19 +1,22 @@
+from re import S
 import numpy as np
 from sistema.SVM import SVM
-
+from sistema.sistema import Sistema, generar_negativos, numero_negativos
  
 modo_limitacion = 'div_1'
 
 class Comite():
     miembros: list[dict[str, SVM | list | int ]] = None
     nombre: str = None
+    sistema: Sistema = None
 
-    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None) -> None:
+    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema: Sistema = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
         self.miembros.append({'clasificador': svm, 'positivos': positivos, "veces": 0, "veces_util": 0})                                # TODO: esto tiene que ser un tipo propio
         self.nombre = nombre
+        self.sistema = sistema
 
     
     def __str__(self) -> str:
@@ -23,7 +26,7 @@ class Comite():
     def entrenamiento(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
-        self.miembros.append({'clasificador': svm, 'positivos': positivos})
+        self.miembros.append({'clasificador': svm, 'positivos': positivos, "veces": 0, "veces_util": 0})
     
 
     def procesar_secuencia(self, secuencia: list, test: bool = False) -> list:
@@ -62,8 +65,39 @@ class Comite():
                     if utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
-                self.miembros.pop(indice_mas_baja)
+                miembro_1 = self.miembros.pop(indice_mas_baja)
+
+                utilidad_mas_baja = 1
+                for i, miembro in enumerate(self.miembros):
+                    if utilidad_mas_baja > miembro['utilidad']:
+                        utilidad_mas_baja = miembro['utilidad']
+                        indice_mas_baja = i
+                miembro_2 = self.miembros.pop(indice_mas_baja)
+                self.__unir_clasificadores(miembro_1, miembro_2)
+
+
+    def __unir_clasificadores(self, miembro1: dict, miembro2: dict) -> None:
+        postitivos_1 = miembro1['positivos']
+        postitivos_2 = miembro2['positivos']
+        matriz_1 = self.procesar_secuencia(postitivos_1)
+        matriz_2 = self.procesar_secuencia(postitivos_2)
+        puntuaciones_imgs_1 = self.sistema.__FDR(matriz_1)
+        puntuaciones_imgs_2 = self.sistema.__FDR(matriz_2)
+        indices_ordenados_1 = np.argsort(puntuaciones_imgs_1)[:len(indices_ordenados_1)/2] 
+        indices_ordenados_2 = np.argsort(puntuaciones_imgs_2)[:len(indices_ordenados_2)/2]
         
+        positivos = []
+        for i in indices_ordenados_1:
+            positivos.append(postitivos_1[i])
+            positivos.append(postitivos_2[i])
+        
+        numero_comite = int(self.nombre.split("/" )[-1])
+        negativos = generar_negativos(self.sistema.muestra_de_inicializacion, numero_comite)
+        self.entrenamiento(positivos, negativos, len(positivos), numero_negativos)
+
+
+
+
 
     
     def obtener_positivos(self) -> list:
