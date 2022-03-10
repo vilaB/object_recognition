@@ -1,16 +1,16 @@
 from re import S
 import numpy as np
 from sistema.SVM import SVM
-from sistema.sistema import Sistema, generar_negativos, numero_negativos
+from sistema.tools import generar_negativos, numero_negativos, FDR
  
 modo_limitacion = 'div_1'
 
 class Comite():
     miembros: list[dict[str, SVM | list | int ]] = None
     nombre: str = None
-    sistema: Sistema = None
+    sistema = None
 
-    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema: Sistema = None) -> None:
+    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
@@ -40,36 +40,37 @@ class Comite():
 
     def establecer_utilidad(self, puntuacion: float):
         for miembro in self.miembros:
-            miembro["veces_util"] += np.where(miembro['ultimas_predicciones'] < puntuacion).sum()
-            miembro["veces"] += len(miembro['ultimas_predicciones'])
+            if miembro.get('ultimas_predicciones') is not None:
+                miembro["veces_util"] += sum(miembro['ultimas_predicciones'] < puntuacion)
+                miembro["veces"] += len(miembro['ultimas_predicciones'])
     
     def purgar_comite_por_utilidad(self, tamano: int) -> None:
         if len(self.miembros) > tamano:
             utilidades = []
             for miembro in self.miembros:
-                miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
                 if miembro["veces"] >= 100:                                                         # TODO: poner en variable
+                    miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
                     utilidades.append(miembro["utilidad"])
             utilidad_media = np.mean(utilidades)
 
-            to_pop = []
-            for i, miembro in enumerate(self.miembros):
-                if miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
-                    to_pop.append(i)
-            for i in reversed(to_pop):
-                self.miembros.pop(i)
+            # to_pop = []
+            # for i, miembro in enumerate(self.miembros):
+            #     if miembro.get("utildiad") is not None and miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
+            #         to_pop.append(i)
+            # for i in reversed(to_pop):
+            #     self.miembros.pop(i)
 
-            if len(self.miembros) > tamano:
+            if len(self.miembros) > tamano:                     # Si no se borra ninguno
                 utilidad_mas_baja = 1
                 for i, miembro in enumerate(self.miembros):
-                    if utilidad_mas_baja > miembro['utilidad']:
+                    if miembro.get("utilidad") is not None and utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
                 miembro_1 = self.miembros.pop(indice_mas_baja)
 
                 utilidad_mas_baja = 1
                 for i, miembro in enumerate(self.miembros):
-                    if utilidad_mas_baja > miembro['utilidad']:
+                    if miembro.get("utilidad") is not None and utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
                 miembro_2 = self.miembros.pop(indice_mas_baja)
@@ -79,12 +80,10 @@ class Comite():
     def __unir_clasificadores(self, miembro1: dict, miembro2: dict) -> None:
         postitivos_1 = miembro1['positivos']
         postitivos_2 = miembro2['positivos']
-        matriz_1 = self.procesar_secuencia(postitivos_1)
-        matriz_2 = self.procesar_secuencia(postitivos_2)
-        puntuaciones_imgs_1 = self.sistema.__FDR(matriz_1)
-        puntuaciones_imgs_2 = self.sistema.__FDR(matriz_2)
-        indices_ordenados_1 = np.argsort(puntuaciones_imgs_1)[:len(indices_ordenados_1)/2] 
-        indices_ordenados_2 = np.argsort(puntuaciones_imgs_2)[:len(indices_ordenados_2)/2]
+        matriz_1 = miembro1['clasificador'].procesar_imagen(np.array(postitivos_1))
+        matriz_2 = miembro2['clasificador'].procesar_imagen(np.array(postitivos_2))
+        indices_ordenados_1 = np.argsort(matriz_1)[:int(len(postitivos_1)/2)] 
+        indices_ordenados_2 = np.argsort(matriz_2)[:int(len(postitivos_2)/2)]
         
         positivos = []
         for i in indices_ordenados_1:
@@ -93,7 +92,7 @@ class Comite():
         
         numero_comite = int(self.nombre.split("/" )[-1])
         negativos = generar_negativos(self.sistema.muestra_de_inicializacion, numero_comite)
-        self.entrenamiento(positivos, negativos, len(positivos), numero_negativos)
+        self.entrenamiento(np.array(positivos), negativos, len(positivos), numero_negativos)
 
 
 
