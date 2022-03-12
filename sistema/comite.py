@@ -1,17 +1,16 @@
 from re import S
 import numpy as np
 from sistema.SVM import SVM
-from sistema.sistema import Sistema, generar_negativos, numero_negativos
-from sistema.tools import numero_positivos 
+from sistema.tools import numero_positivos, generar_negativos, numero_negativos
 
 modo_limitacion = 'div_1'
 
 class Comite():
     miembros: list[dict[str, SVM | list | int ]] = None
     nombre: str = None
-    sistema: Sistema = None
+    sistema = None
 
-    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema: Sistema = None) -> None:
+    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
