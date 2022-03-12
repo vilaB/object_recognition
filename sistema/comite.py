@@ -117,33 +117,23 @@ class Comite():
 
 
     # Módulo limitación
-    def purgar_comite(self, tamano: int, muestra_inicializacion: list) -> None:
-        tamano_banco_div1_2 = 50
+    def purgar_comite(self, tamano: int) -> None:
 
         if len(self.miembros) > tamano:
             if modo_limitacion == 'rand':
                 to_pop = list(np.random.randint(0, len(self.miembros), size=len(self.miembros) - tamano))
             elif modo_limitacion in ['div_1', 'div_2']:
-                muestra_inicializacion = np.array(muestra_inicializacion)
-                muestra_inicializacion = np.vstack(muestra_inicializacion[:, 0])
-                negativos = np.vstack([muestra_inicializacion])
-                negatives = elegir_negativos_aleatoriamente(negativos, 1000)
-                data_bank_red = elegir_negativos_aleatoriamente(negatives, tamano_banco_div1_2)
-                data_bank_red = data_bank_red.astype(np.float32)
-                puntuaciones = self.procesar_secuencia(data_bank_red)  # [puntuaciones_svm_1, puntuaciones_svm2 ...] -> cada puntuaciones sn las puntuaciones para toda la secuencia ( num_clasificadores x num_frames)
+                positivos = self.obtener_positivos()
+                positivos = np.array(positivos)
+                positivos = np.vstack(positivos[:, 0])
+                puntuaciones = self.procesar_secuencia(positivos)  # [puntuaciones_svm_1, puntuaciones_svm2 ...] -> cada puntuaciones sn las puntuaciones para toda la secuencia ( num_clasificadores x num_frames)
                 puntuaciones = np.transpose(puntuaciones)  # Lo traspone (num_frames x num_clasificadores)
 
-                if modo_limitacion == 'div_1':
-                    signed_scores = np.sign(puntuaciones)  # Aplica función signal: The `sign` function returns ``-1 if x < 0, 0 if x==0, 1 if x > 0`` ( num_frames x num_clasificadores)
-                    div_points = np.zeros([1, signed_scores.shape[1]])  # Array con ceros, del tamaño del número de clasificadores (num_clasificadores)
-                    for i in range(signed_scores.shape[0]):  # Para cada frame... (fila)
-                        aux_signed = np.reshape(np.repeat(signed_scores[i, :], signed_scores.shape[1]), [signed_scores.shape[1], signed_scores.shape[1]])
-                        div_points = div_points + np.dot(aux_signed, signed_scores[i, :]) - signed_scores[i,:] * signed_scores[i,:]  # Acumula los valores de diversidad para el frame en cuestión con la movida esta
-                elif modo_limitacion == 'div_2':
-                    div_points = np.zeros([1, puntuaciones.shape[1]])
-                    for i in range(puntuaciones.shape[0]):
-                        mat_scores = np.reshape(np.repeat(puntuaciones[i, :], puntuaciones.shape[1]),[puntuaciones.shape[1], puntuaciones.shape[1]])
-                        div_points = div_points + np.sum(np.abs(mat_scores - np.transpose(mat_scores)), axis=0)
+                signed_scores = np.sign(puntuaciones)               # Aplica función signal: The `sign` function returns ``-1 if x < 0, 0 if x==0, 1 if x > 0`` ( num_frames x num_clasificadores)
+                div_points = np.zeros([1, signed_scores.shape[1]])  # Array con ceros, del tamaño del número de clasificadores (num_clasificadores)
+                for i in range(signed_scores.shape[0]):             # Para cada frame... (fila)
+                    aux_signed = np.reshape(np.repeat(signed_scores[i, :], signed_scores.shape[1]), [signed_scores.shape[1], signed_scores.shape[1]])
+                    div_points = div_points + np.dot(aux_signed, signed_scores[i, :]) - signed_scores[i,:] * signed_scores[i,:]  # Acumula los valores de diversidad para el frame en cuestión con la movida esta
 
                 args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
                 to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
