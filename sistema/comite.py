@@ -2,7 +2,8 @@ from re import S
 import numpy as np
 from sistema.SVM import SVM
 from sistema.sistema import Sistema, generar_negativos, numero_negativos
- 
+from sistema.tools import numero_positivos 
+
 modo_limitacion = 'div_1'
 
 class Comite():
@@ -83,14 +84,20 @@ class Comite():
         matriz_2 = self.procesar_secuencia(postitivos_2)
         puntuaciones_imgs_1 = self.sistema.__FDR(matriz_1)
         puntuaciones_imgs_2 = self.sistema.__FDR(matriz_2)
-        indices_ordenados_1 = np.argsort(puntuaciones_imgs_1)[:len(indices_ordenados_1)/2] 
-        indices_ordenados_2 = np.argsort(puntuaciones_imgs_2)[:len(indices_ordenados_2)/2]
+        indices_ordenados_1 = np.argsort(puntuaciones_imgs_1)
+        indices_ordenados_2 = np.argsort(puntuaciones_imgs_2)
         
         positivos = []
-        for i in indices_ordenados_1:
-            positivos.append(postitivos_1[i])
-        for i in indices_ordenados_2:
-            positivos.append(postitivos_2[i])
+        i = 0
+        siguiente_comite = 0 
+        while len(positivos) < numero_positivos:
+            if siguiente_comite == 0:
+                positivos.append(postitivos_1[indices_ordenados_1[i]])
+                siguiente_comite = 1
+            else:
+                positivos.append(postitivos_2[indices_ordenados_2[i]])
+                siguiente_comite = 0
+                i += 1
         
         numero_comite = int(self.nombre.split("/" )[-1])
         negativos = generar_negativos(self.sistema.muestra_de_inicializacion, numero_comite)
