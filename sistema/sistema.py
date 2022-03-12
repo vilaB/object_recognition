@@ -79,7 +79,7 @@ class Sistema():
         else:
             prediccion = self.entrenamiento_no_supervisado(secuencia)
         if prediccion >= 0: 
-            self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite) # self.muestra_de_inicializacion
+            self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion) # self.muestra_de_inicializacion
         
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion

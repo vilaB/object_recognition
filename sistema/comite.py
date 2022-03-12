@@ -1,16 +1,16 @@
 from re import S
 import numpy as np
 from sistema.SVM import SVM
-from sistema.tools import generar_negativos, numero_negativos, FDR
+from sistema.sistema import Sistema, generar_negativos, numero_negativos
  
 modo_limitacion = 'div_1'
 
 class Comite():
     miembros: list[dict[str, SVM | list | int ]] = None
     nombre: str = None
-    sistema = None
+    sistema: Sistema = None
 
-    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema = None) -> None:
+    def __init__(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int, nombre: str = None, sistema: Sistema = None) -> None:
         muestra, etiquetas = construir_muestra_de_entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
         svm = SVM(muestra=muestra, etiquetas=etiquetas)
         self.miembros = []
@@ -40,37 +40,36 @@ class Comite():
 
     def establecer_utilidad(self, puntuacion: float):
         for miembro in self.miembros:
-            if miembro.get('ultimas_predicciones') is not None:
-                miembro["veces_util"] += sum(miembro['ultimas_predicciones'] < puntuacion)
-                miembro["veces"] += len(miembro['ultimas_predicciones'])
+            miembro["veces_util"] += np.where(miembro['ultimas_predicciones'] < puntuacion).sum()
+            miembro["veces"] += len(miembro['ultimas_predicciones'])
     
     def purgar_comite_por_utilidad(self, tamano: int) -> None:
         if len(self.miembros) > tamano:
             utilidades = []
             for miembro in self.miembros:
+                miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
                 if miembro["veces"] >= 100:                                                         # TODO: poner en variable
-                    miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
                     utilidades.append(miembro["utilidad"])
             utilidad_media = np.mean(utilidades)
 
-            # to_pop = []
-            # for i, miembro in enumerate(self.miembros):
-            #     if miembro.get("utildiad") is not None and miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
-            #         to_pop.append(i)
-            # for i in reversed(to_pop):
-            #     self.miembros.pop(i)
+            to_pop = []
+            for i, miembro in enumerate(self.miembros):
+                if miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
+                    to_pop.append(i)
+            for i in reversed(to_pop):
+                self.miembros.pop(i)
 
-            if len(self.miembros) > tamano:                     # Si no se borra ninguno
+            if len(self.miembros) > tamano:
                 utilidad_mas_baja = 1
                 for i, miembro in enumerate(self.miembros):
-                    if miembro.get("utilidad") is not None and utilidad_mas_baja > miembro['utilidad']:
+                    if utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
                 miembro_1 = self.miembros.pop(indice_mas_baja)
 
                 utilidad_mas_baja = 1
                 for i, miembro in enumerate(self.miembros):
-                    if miembro.get("utilidad") is not None and utilidad_mas_baja > miembro['utilidad']:
+                    if utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
                 miembro_2 = self.miembros.pop(indice_mas_baja)
@@ -80,19 +79,22 @@ class Comite():
     def __unir_clasificadores(self, miembro1: dict, miembro2: dict) -> None:
         postitivos_1 = miembro1['positivos']
         postitivos_2 = miembro2['positivos']
-        matriz_1 = miembro1['clasificador'].procesar_imagen(np.array(postitivos_1))
-        matriz_2 = miembro2['clasificador'].procesar_imagen(np.array(postitivos_2))
-        indices_ordenados_1 = np.argsort(matriz_1)[:int(len(postitivos_1)/2)] 
-        indices_ordenados_2 = np.argsort(matriz_2)[:int(len(postitivos_2)/2)]
+        matriz_1 = self.procesar_secuencia(postitivos_1)
+        matriz_2 = self.procesar_secuencia(postitivos_2)
+        puntuaciones_imgs_1 = self.sistema.__FDR(matriz_1)
+        puntuaciones_imgs_2 = self.sistema.__FDR(matriz_2)
+        indices_ordenados_1 = np.argsort(puntuaciones_imgs_1)[:len(indices_ordenados_1)/2] 
+        indices_ordenados_2 = np.argsort(puntuaciones_imgs_2)[:len(indices_ordenados_2)/2]
         
         positivos = []
         for i in indices_ordenados_1:
             positivos.append(postitivos_1[i])
+        for i in indices_ordenados_2:
             positivos.append(postitivos_2[i])
         
         numero_comite = int(self.nombre.split("/" )[-1])
         negativos = generar_negativos(self.sistema.muestra_de_inicializacion, numero_comite)
-        self.entrenamiento(np.array(positivos), negativos, len(positivos), numero_negativos)
+        self.entrenamiento(positivos, negativos, len(positivos), numero_negativos)
 
 
 
@@ -117,23 +119,33 @@ class Comite():
 
 
     # Módulo limitación
-    def purgar_comite(self, tamano: int) -> None:
+    def purgar_comite(self, tamano: int, muestra_inicializacion: list) -> None:
+        tamano_banco_div1_2 = 50
 
         if len(self.miembros) > tamano:
             if modo_limitacion == 'rand':
                 to_pop = list(np.random.randint(0, len(self.miembros), size=len(self.miembros) - tamano))
             elif modo_limitacion in ['div_1', 'div_2']:
-                positivos = self.obtener_positivos()
-                positivos = np.array(positivos)
-                positivos = np.vstack(positivos[:, 0])
-                puntuaciones = self.procesar_secuencia(positivos)  # [puntuaciones_svm_1, puntuaciones_svm2 ...] -> cada puntuaciones sn las puntuaciones para toda la secuencia ( num_clasificadores x num_frames)
+                muestra_inicializacion = np.array(muestra_inicializacion)
+                muestra_inicializacion = np.vstack(muestra_inicializacion[:, 0])
+                negativos = np.vstack([muestra_inicializacion])
+                negatives = elegir_negativos_aleatoriamente(negativos, 1000)
+                data_bank_red = elegir_negativos_aleatoriamente(negatives, tamano_banco_div1_2)
+                data_bank_red = data_bank_red.astype(np.float32)
+                puntuaciones = self.procesar_secuencia(data_bank_red)  # [puntuaciones_svm_1, puntuaciones_svm2 ...] -> cada puntuaciones sn las puntuaciones para toda la secuencia ( num_clasificadores x num_frames)
                 puntuaciones = np.transpose(puntuaciones)  # Lo traspone (num_frames x num_clasificadores)
 
-                signed_scores = np.sign(puntuaciones)               # Aplica función signal: The `sign` function returns ``-1 if x < 0, 0 if x==0, 1 if x > 0`` ( num_frames x num_clasificadores)
-                div_points = np.zeros([1, signed_scores.shape[1]])  # Array con ceros, del tamaño del número de clasificadores (num_clasificadores)
-                for i in range(signed_scores.shape[0]):             # Para cada frame... (fila)
-                    aux_signed = np.reshape(np.repeat(signed_scores[i, :], signed_scores.shape[1]), [signed_scores.shape[1], signed_scores.shape[1]])
-                    div_points = div_points + np.dot(aux_signed, signed_scores[i, :]) - signed_scores[i,:] * signed_scores[i,:]  # Acumula los valores de diversidad para el frame en cuestión con la movida esta
+                if modo_limitacion == 'div_1':
+                    signed_scores = np.sign(puntuaciones)  # Aplica función signal: The `sign` function returns ``-1 if x < 0, 0 if x==0, 1 if x > 0`` ( num_frames x num_clasificadores)
+                    div_points = np.zeros([1, signed_scores.shape[1]])  # Array con ceros, del tamaño del número de clasificadores (num_clasificadores)
+                    for i in range(signed_scores.shape[0]):  # Para cada frame... (fila)
+                        aux_signed = np.reshape(np.repeat(signed_scores[i, :], signed_scores.shape[1]), [signed_scores.shape[1], signed_scores.shape[1]])
+                        div_points = div_points + np.dot(aux_signed, signed_scores[i, :]) - signed_scores[i,:] * signed_scores[i,:]  # Acumula los valores de diversidad para el frame en cuestión con la movida esta
+                elif modo_limitacion == 'div_2':
+                    div_points = np.zeros([1, puntuaciones.shape[1]])
+                    for i in range(puntuaciones.shape[0]):
+                        mat_scores = np.reshape(np.repeat(puntuaciones[i, :], puntuaciones.shape[1]),[puntuaciones.shape[1], puntuaciones.shape[1]])
+                        div_points = div_points + np.sum(np.abs(mat_scores - np.transpose(mat_scores)), axis=0)
 
                 args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
                 to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
