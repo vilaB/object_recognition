@@ -21,6 +21,10 @@ class Comite():
     
     def __str__(self) -> str:
         return self.nombre
+    
+
+    def tamano_comite(self) -> int:
+        return len(self.miembros)
 
     
     def entrenamiento(self, positivos: list, negativos: list, numero_positivos: int, numero_negativos: int) -> None:
@@ -40,21 +44,24 @@ class Comite():
 
     def establecer_utilidad(self, puntuacion: float):
         for miembro in self.miembros:
-            miembro["veces_util"] += np.where(miembro['ultimas_predicciones'] < puntuacion).sum()
-            miembro["veces"] += len(miembro['ultimas_predicciones'])
+            if miembro.get("ultimas_predicciones") is not None:
+                miembro["veces_util"] += sum(miembro['ultimas_predicciones'] < puntuacion)
+                miembro["veces"] += len(miembro['ultimas_predicciones'])
     
+
     def purgar_comite_por_utilidad(self, tamano: int) -> None:
         if len(self.miembros) > tamano:
             utilidades = []
             for miembro in self.miembros:
-                miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
-                if miembro["veces"] >= 100:                                                         # TODO: poner en variable
-                    utilidades.append(miembro["utilidad"])
+                if miembro["veces"] != 0:
+                    miembro["utilidad"] = float(miembro["veces_util"]) / float(miembro["veces"])
+                    if miembro["veces"] >= 100:                                                         # TODO: poner en variable
+                        utilidades.append(miembro["utilidad"])
             utilidad_media = np.mean(utilidades)
 
             to_pop = []
             for i, miembro in enumerate(self.miembros):
-                if miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
+                if miembro.get("utilidad")is not None and miembro["utilidad"] < utilidad_media and i != 0 and miembro["veces"] >= 100:     # TODO: podría no eliminarse ninguno!
                     to_pop.append(i)
             for i in reversed(to_pop):
                 self.miembros.pop(i)
@@ -62,7 +69,7 @@ class Comite():
             if len(self.miembros) > tamano:
                 utilidad_mas_baja = 1
                 for i, miembro in enumerate(self.miembros):
-                    if utilidad_mas_baja > miembro['utilidad']:
+                    if miembro.get('utilidad') and utilidad_mas_baja > miembro['utilidad']:
                         utilidad_mas_baja = miembro['utilidad']
                         indice_mas_baja = i
                 miembro_1 = self.miembros.pop(indice_mas_baja)

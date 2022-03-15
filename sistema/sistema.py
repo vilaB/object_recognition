@@ -1,6 +1,5 @@
 from sistema.comite import Comite
 import numpy as np
-import statistics
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR
@@ -62,6 +61,19 @@ class Sistema():
             """.format(numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador)
 
 
+    def tamanos_sistema(self):
+        tam_nosup = 0
+        for comite in self.comites_no_supervisados:
+            tam_nosup += comite.tamano_comite()
+        tam_nosup = tam_nosup / len(self.comites_no_supervisados)
+
+        tam_sup = 0
+        for comite in self.comites_supervisados:
+            tam_sup += comite.tamano_comite()
+        tam_sup = tam_sup / len(self.comites_supervisados)
+        return tam_nosup, tam_sup
+        
+
     def test(self, secuencia: list):
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) 
@@ -79,7 +91,7 @@ class Sistema():
         else:
             prediccion = self.entrenamiento_no_supervisado(secuencia)
         if prediccion >= 0: 
-            self.comites_no_supervisados[prediccion].purgar_comite_por_utilidad(tamano_maximo_comite) # self.muestra_de_inicializacion
+            self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         
         self.entrenamiento_supervisado(secuencia, individuo)
         return prediccion
@@ -105,7 +117,7 @@ class Sistema():
             self.comites_no_supervisados[prediccion].entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
 
             # Para medición de utilidad
-            self.comites_no_supervisados[prediccion].establecer_utilidad(puntuacion_ganadora)
+            # self.comites_no_supervisados[prediccion].establecer_utilidad(puntuacion_ganadora)
         return prediccion
         
     

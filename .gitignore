@@ -8,6 +8,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# nohup
+nohup.out
+experimentos/*
+
 # C extensions
 *.so
 

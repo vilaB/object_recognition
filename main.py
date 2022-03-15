@@ -8,6 +8,8 @@ import os
 num_subsecuencias = 15
 resultados_nosup = []
 resultados_sup = []
+tamanos_nosup = []
+tamanos_sup = []
 
 identificador = str(uuid.uuid4())
 print("IDENTIFICADOR: " + identificador)
@@ -23,10 +25,13 @@ def experimento():
     num_experimento += 1
     test = dataset[9:]
     res_nosup, res_sup = [], []
+    tam_nosup, tam_sup = [], []
 
-    nosup, sup = fase_test(sistema, test)
+    nosup, sup, t_nosup, t_sup = fase_test(sistema, test)
     res_nosup.append(nosup)
     res_sup.append(sup)
+    tam_nosup.append(t_nosup)
+    tam_sup.append(t_sup)
 
     for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
         # Fase Entrenamiento
@@ -35,12 +40,16 @@ def experimento():
             for secuencia in secuencias:
                 sistema.entrenar(secuencia, individuo)
         sistema.healing()
-        nosup, sup = fase_test(sistema, test)
+        nosup, sup, t_nosup, t_sup = fase_test(sistema, test)
         res_nosup.append(nosup)
         res_sup.append(sup)
+        tam_nosup.append(t_nosup)
+        tam_sup.append(t_sup)
     print("FIN EXPERIMENTO")
     resultados_nosup.append(res_nosup)
     resultados_sup.append(res_sup)
+    tamanos_nosup.append(tam_nosup)
+    tamanos_sup.append(tam_sup)
     return sistema
 
 
@@ -63,7 +72,10 @@ def fase_test(sistema: Sistema, test: list):
     print("\t\tAciertos sup: ", aciertos_sup)
     print("\t\tPrecision nosup: ", float(aciertos_nosup)/secuencias_evaluadas)
     print("\t\tPrecision sup: ", float(aciertos_sup)/secuencias_evaluadas)
-    return  round(float(aciertos_nosup)/secuencias_evaluadas, 4), round(float(aciertos_sup)/secuencias_evaluadas, 4)
+    tam_nosup, tam_sup = sistema.tamanos_sistema()
+    print("\t\tTamaño en modo no supervisado: ", tam_nosup)
+    print("\t\tTamaño en modo supervisado: ", tam_sup)
+    return  round(float(aciertos_nosup)/secuencias_evaluadas, 4), round(float(aciertos_sup)/secuencias_evaluadas, 4), tam_nosup, tam_sup
 
 
 run_0 = ["s11", "s4", "s2", "s9", "s1", "s6", "s5", "s8", "s3", "s7", "s10"]
@@ -117,6 +129,20 @@ f.close()
 
 f = open(str(identificador) + "resultados_sup.txt", "w")
 for exp in resultados_sup:
+    f.write('\t'.join([str(e) for e in exp]).replace(".", ",") + "\n")
+f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+f.write("\n" + str(sistema))
+f.close()
+
+f = open(str(identificador) + "tamanos_nosup.txt", "w")
+for exp in tamanos_nosup:
+    f.write('\t'.join([str(e) for e in exp]).replace(".", ",") + "\n")
+f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+f.write("\n" + str(sistema))
+f.close()
+
+f = open(str(identificador) + "tamanos_sup.txt", "w")
+for exp in tamanos_sup:
     f.write('\t'.join([str(e) for e in exp]).replace(".", ",") + "\n")
 f.write("\n" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 f.write("\n" + str(sistema))
