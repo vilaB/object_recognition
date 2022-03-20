@@ -81,6 +81,42 @@ def fase_test(sistema: Sistema, test: list):
 
 run_0 = ["s11", "s4", "s2", "s9", "s1", "s6", "s5", "s8", "s3", "s7", "s10"]
 dataset = cargar_CORe50('../dataset/Core50', run_0)
+experimento()
+
+run_1 = ["s2", "s9", "s1", "s8", "s4", "s5", "s11", "s6", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_1)
+experimento()
+
+run_2 = ["s8", "s2", "s6", "s5", "s4", "s1", "s9", "s11", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_2)
+experimento()
+
+run_3 = ["s1", "s9", "s2", "s8", "s6", "s11", "s5", "s4", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_3)
+experimento()
+
+run_4 = ["s5", "s1", "s4", "s8", "s11", "s9", "s6", "s2", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_4)
+experimento()
+
+run_5 = ["s4", "s5", "s11", "s8", "s2", "s1", "s9", "s6", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_5)
+experimento()
+
+run_6 = ["s8", "s11", "s1", "s9", "s2", "s4", "s6", "s5", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_6)
+experimento()
+
+run_7 = ["s6", "s2", "s5", "s8", "s11", "s1", "s9", "s4", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_7)
+experimento()
+
+run_8 = ["s4", "s5", "s6", "s11", "s2", "s1", "s9", "s8", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_8)
+experimento()
+
+run_9 = ["s1", "s8", "s9", "s4", "s6", "s2", "s11", "s5", "s3", "s7", "s10"]
+dataset = cargar_CORe50('../dataset/Core50', run_9)
 sistema = experimento()
 
 
