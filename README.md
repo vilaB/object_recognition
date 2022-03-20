@@ -13,5 +13,13 @@ Formado por una lista de comités, en realidad dos, una para el modo supervisado
 # Instalación
 Instala con pip cada una de las dependencias. Intenta usar versiones de Python actuales, 3.9, 3.10, pues uso el typing más reciente implementado en estas últimas. Viva el actualizarse!
 
+# Docker
+Para lanzar el docker, primero tenderemos que construirlo:
+docker build . -t experimento:1.0
+Luego ya podemos lanzarlo con:
+docker run -d -v /root/EXPERIMENTOS/object_recognition/:/EXPERIMENTOS -v /root/EXPERIMENTOS/dataset/:/dataset -m 4g experimento:1.0
+
+Para ver como va docker logs id --follow
+
 # Contacto
 Si tienes cualquier duda con este código no dudes en contactarme en gabrivb@outlook.es o en gabriel.vilarino@rai.usc.es. Estaré encantado de echarte una mano.
