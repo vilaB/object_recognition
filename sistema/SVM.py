@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
+from sklearn import svm
 
-class SVM:
+class SVMOpenCV:
     svm = None
     
     def __init__(self, muestra: list, etiquetas: list) -> None:
@@ -15,3 +16,27 @@ class SVM:
 
     def procesar_imagen(self, secuencia: list) -> float:
         return self.svm.predict(secuencia, flags = cv2.ml.STAT_MODEL_RAW_OUTPUT)[1][:, 0]
+
+    
+class SVM:
+    svm = None
+    
+    def __init__(self, muestra: list, etiquetas: list) -> None:
+        self.svm = svm.LinearSVC()
+        self.svm = self.svm.fit(muestra, etiquetas)
+    
+
+    def procesar_imagen(self, secuencia: list) -> float:
+        scores = self.svm.decision_function(secuencia)      # Confidence scores per (n_samples, n_classes) combination. In the binary case, confidence score for self.classes_[1] where >0 means this class would be predicted.
+        w_norm = np.linalg.norm(self.svm.coef_)
+        dist = scores / w_norm                              # Normalizada         
+        return -dist
+
+
+
+if __name__ == "__main__":
+    muestra = np.array([[0,0,0], [0,0,1], [0,1,0], [0,1,1], [1,0,0], [1,0,1], [1,1,0], [1,1,1]])
+    etiquetas = np.array([0,0,0,0,0,1,1,1])
+
+    clasificador = SVM(muestra, etiquetas)
+    print(clasificador.procesar_imagen(muestra))
