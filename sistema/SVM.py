@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from sklearn import svm
+from sklearn.preprocessing import StandardScaler
 
 class SVMOpenCV:
     svm = None
@@ -20,13 +21,17 @@ class SVMOpenCV:
     
 class SVM:
     svm = None
+    scaler = None
     
     def __init__(self, muestra: list, etiquetas: list) -> None:
-        self.svm = svm.LinearSVC()
-        self.svm = self.svm.fit(muestra, etiquetas)
+        self.svm = svm.LinearSVC(C=1.e-06)
+        self.scaler = StandardScaler()
+        self.scaler = self.scaler.fit(muestra)
+        self.svm = self.svm.fit(self.scaler.transform(muestra), etiquetas.ravel())
     
 
     def procesar_imagen(self, secuencia: list) -> float:
+        secuencia = self.scaler.transform(secuencia)
         scores = self.svm.decision_function(secuencia)      # Confidence scores per (n_samples, n_classes) combination. In the binary case, confidence score for self.classes_[1] where >0 means this class would be predicted.
         w_norm = np.linalg.norm(self.svm.coef_)
         dist = scores / w_norm                              # Normalizada         

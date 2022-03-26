@@ -21,5 +21,8 @@ docker run -d -v /root/EXPERIMENTOS/object_recognition/:/EXPERIMENTOS -v /root/E
 
 Para ver como va docker logs id --follow
 
+docker build . -t exp:1.0
+docker run exp:1.0
+
 # Contacto
 Si tienes cualquier duda con este código no dudes en contactarme en gabrivb@outlook.es o en gabriel.vilarino@rai.usc.es. Estaré encantado de echarte una mano.
