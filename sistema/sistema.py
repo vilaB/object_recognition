@@ -3,33 +3,47 @@ import numpy as np
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR
+from sklearn.preprocessing import StandardScaler
 
 class Sistema():
     comites_no_supervisados: list[Comite] = None
     comites_supervisados: list[Comite] = None 
     muestra_de_inicializacion: list = None
     nombre: str = None 
+    scaler: StandardScaler = None
 
     def __init__(self, muestra_de_inicializacion: list, nombres_comites: list = None, nombre: str = None):
         print("Construcción del sistema en curso...")
-        self.muestra_de_inicializacion = muestra_de_inicializacion
+        muestra_plana_escalado = []
+        for objeto in muestra_de_inicializacion:
+            for imagen in objeto:
+                muestra_plana_escalado.append(imagen)
+        muestra_plana_escalado = np.array(muestra_plana_escalado)
+        print(muestra_plana_escalado.shape, flush=True)
+        self.scaler = StandardScaler()
+        self.scaler = self.scaler.fit(muestra_plana_escalado)
+
+        self.muestra_de_inicializacion = []
+        for individuo in range(len(muestra_de_inicializacion)):
+            self.muestra_de_inicializacion.append(self.scaler.transform(muestra_de_inicializacion[individuo]))
+            
         self.comites_no_supervisados = []
         self.comites_supervisados = []
         self.nombre = nombre + "/" if nombre else ""
-        for individuo in range(len(muestra_de_inicializacion)):
-            negativos = generar_negativos(muestra_de_inicializacion, individuo)
-            comite_no_supervisado = Comite(positivos=muestra_de_inicializacion[individuo], negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos, sistema=self)
-            comite_supervisado = Comite(positivos=muestra_de_inicializacion[individuo], negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos, sistema=self)
+        for individuo in range(len(self.muestra_de_inicializacion)):
+            negativos = generar_negativos(self.muestra_de_inicializacion, individuo)
+            comite_no_supervisado = Comite(positivos=self.scaler.transform(self.muestra_de_inicializacion[individuo]), negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos, sistema=self)
+            comite_supervisado = Comite(positivos=self.scaler.transform(self.muestra_de_inicializacion[individuo]), negativos=negativos, numero_positivos=numero_positivos, numero_negativos=numero_negativos, sistema=self)
             self.comites_no_supervisados.append(comite_no_supervisado)
             self.comites_supervisados.append(comite_supervisado)
         if nombres_comites is not None:
-            if len(muestra_de_inicializacion) != len(nombres_comites):
+            if len(self.muestra_de_inicializacion) != len(nombres_comites):
                 raise Exception("El número de nombres de comité no coincide con el número de individuos pasado en la muestra de inicialización.")
             for i, nombre_comite in enumerate(nombres_comites):
                 self.comites_no_supervisados[i].nombre = self.nombre + nombre_comite
                 self.comites_supervisados[i].nombre = self.nombre + nombre_comite
         else:
-            for i in range(len(muestra_de_inicializacion)):
+            for i in range(len(self.muestra_de_inicializacion)):
                 self.comites_no_supervisados[i].nombre = self.nombre + str(i)
                 self.comites_supervisados[i].nombre = self.nombre + str(i)
         print("Construcción del sistema finalizada.")
@@ -75,6 +89,7 @@ class Sistema():
         
 
     def test(self, secuencia: list):
+        secuencia = self.scaler.transform(secuencia)
         puntuaciones_comites_no_supervisados, _ = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion_no_supervisados = self.__funcion_decision_comite_ganador(puntuaciones_comites_no_supervisados) 
 
@@ -84,6 +99,7 @@ class Sistema():
 
 
     def entrenar(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False) -> int:
+        secuencia = self.scaler.transform(secuencia)
         if supervisar_no_supervisados:
             self.entrenamiento_supervisado(secuencia, individuo, self.comites_no_supervisados[individuo])
             prediccion = individuo
@@ -98,6 +114,7 @@ class Sistema():
 
     
     def entrenamiento_no_supervisado(self, secuencia: list):
+        secuencia = self.scaler.transform(secuencia)
         # Predicción por parte del sistema no supervisado
         puntuaciones_comites, puntuaciones_imagenes_de_comites = self.__presentar_secuencia(secuencia, self.comites_no_supervisados)
         prediccion = self.__funcion_decision_comite_ganador(puntuaciones_comites)
@@ -123,6 +140,7 @@ class Sistema():
     
 
     def entrenamiento_supervisado(self, secuencia: list[np.array], individuo: int, comite: Comite = None):
+        secuencia = self.scaler.transform(secuencia)
         if individuo >= 0:
             if comite is None: comite = self.comites_supervisados[individuo]
             matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
