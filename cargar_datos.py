@@ -4,6 +4,12 @@ import os
 
 orden_presentacion_objetos = ['o1', 'o10', 'o11', 'o12', 'o13', 'o14', 'o15', 'o16', 'o17', 'o18', 'o19', 'o2', 'o20', 'o21', 'o22', 'o23', 'o24', 'o25', 'o26', 'o27', 'o28', 'o29', 'o3', 'o30', 'o31', 'o32', 'o33', 'o34', 'o35', 'o36', 'o37', 'o38', 'o39', 'o4', 'o40', 'o41', 'o42', 'o43', 'o44', 'o45', 'o46', 'o47', 'o48', 'o49', 'o50', 'o5', 'o6', 'o7', 'o8', 'o9']
 
+def normalize(v):
+    norm = np.linalg.norm(v)
+    if norm == 0: 
+       return v
+    return v / norm
+
 def cargar_CORe50(directorio: str, orden_presentacion: list) -> list:
     datos = []
     print("[", end="", flush=True)
@@ -13,7 +19,8 @@ def cargar_CORe50(directorio: str, orden_presentacion: list) -> list:
         for objeto in orden_presentacion_objetos: # o1, o2...
             secuencia = []
             for imagen_objeto in os.listdir(directorio + '/' + nombre_escena + '/' + objeto): # 1.jpg, 2.jpg...
-                secuencia.append(np.fromfile(directorio + '/' + nombre_escena + '/' + objeto + '/' + imagen_objeto, dtype=np.float32))
+                img = np.fromfile(directorio + '/' + nombre_escena + '/' + objeto + '/' + imagen_objeto, dtype=np.float32)
+                secuencia.append(normalize(img))
             escena.append(secuencia)
 
         inicio = 0

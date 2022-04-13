@@ -10,4 +10,4 @@ RUN apt-get install ffmpeg libsm6 libxext6  -y
 RUN pip install scipy
 
 RUN mkdir /dataset
-CMD ["/EXPERIMENTOS/main.sh"]
+CMD ["python", "/EXPERIMENTOS/main.py"]

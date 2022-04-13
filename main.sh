@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /EXPERIMENTOS/main.py > /EXPERIMENTOS/salida
+python /EXPERIMENTOS/main.py
