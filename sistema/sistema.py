@@ -94,6 +94,7 @@ class Sistema():
             self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         
         self.entrenamiento_supervisado(secuencia, individuo)
+        self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         return prediccion
 
     
@@ -150,6 +151,8 @@ class Sistema():
                     comite.marcar_miembro_para_eliminar(j)
         for comite in self.comites_no_supervisados:
             comite.eliminar_miembros_marcados()
+        global tamano_maximo_comite
+        tamano_maximo_comite += 5
 
 
     def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:

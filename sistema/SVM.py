@@ -1,6 +1,13 @@
 import cv2
 import numpy as np
 from sklearn import svm
+import numpy as np
+
+def normalize(output, svm):
+    norm = np.linalg.norm(svm.getSupportVectors())
+    if norm == 0: 
+       return output
+    return output / norm
 
 class SVM:
     svm = None
@@ -15,7 +22,7 @@ class SVM:
     
 
     def procesar_imagen(self, secuencia: list) -> float:
-        return self.svm.predict(secuencia, flags = cv2.ml.STAT_MODEL_RAW_OUTPUT)[1][:, 0]
+        return normalize(self.svm.predict(secuencia, flags = cv2.ml.STAT_MODEL_RAW_OUTPUT)[1][:, 0], self.svm)
 
 
 

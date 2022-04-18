@@ -4,6 +4,9 @@ import numpy as np
 import uuid
 import datetime
 import os
+import sys
+
+num_run = int(sys.argv[1])
 
 num_subsecuencias = 15
 resultados_nosup = []
@@ -13,17 +16,17 @@ tamanos_sup = []
 
 identificador = str(uuid.uuid4())
 print("IDENTIFICADOR: " + identificador)
-identificador = "experimentos/" + identificador
+identificador = "experimentos/" + str(num_run)
 os.makedirs(identificador)
 num_experimento: int = 0
 
 def experimento():
     print("INICIO EXPERIMENTO")
     primera_escena_inicializacion = dataset[0]
-    global num_experimento
-    os.makedirs(identificador + "/" + str(num_experimento))
-    sistema = Sistema(primera_escena_inicializacion, nombre=identificador + "/" + str(num_experimento))
-    num_experimento += 1
+    # global num_experimento
+    # os.makedirs(identificador + "/" + str(num_experimento))
+    sistema = Sistema(primera_escena_inicializacion, nombre=identificador) # + "/" + str(num_experimento)
+    # num_experimento += 1
     test = dataset[9:]
     res_nosup, res_sup = [], []
     tam_nosup, tam_sup = [], []
@@ -78,46 +81,46 @@ def fase_test(sistema: Sistema, test: list):
     print("\t\tTamaño en modo supervisado: ", tam_sup)
     return  round(float(aciertos_nosup)/secuencias_evaluadas, 4), round(float(aciertos_sup)/secuencias_evaluadas, 4), tam_nosup, tam_sup
 
-
-run_0 = ["s11", "s4", "s2", "s9", "s1", "s6", "s5", "s8", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_0)
-experimento()
-
-run_1 = ["s2", "s9", "s1", "s8", "s4", "s5", "s11", "s6", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_1)
-experimento()
-
-run_2 = ["s8", "s2", "s6", "s5", "s4", "s1", "s9", "s11", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_2)
-experimento()
-
-run_3 = ["s1", "s9", "s2", "s8", "s6", "s11", "s5", "s4", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_3)
-experimento()
-
-run_4 = ["s5", "s1", "s4", "s8", "s11", "s9", "s6", "s2", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_4)
-experimento()
-
-run_5 = ["s4", "s5", "s11", "s8", "s2", "s1", "s9", "s6", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_5)
-experimento()
-
-run_6 = ["s8", "s11", "s1", "s9", "s2", "s4", "s6", "s5", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_6)
-experimento()
-
-run_7 = ["s6", "s2", "s5", "s8", "s11", "s1", "s9", "s4", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_7)
-experimento()
-
-run_8 = ["s4", "s5", "s6", "s11", "s2", "s1", "s9", "s8", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_8)
-experimento()
-
-run_9 = ["s1", "s8", "s9", "s4", "s6", "s2", "s11", "s5", "s3", "s7", "s10"]
-dataset = cargar_CORe50('../dataset/Core50', run_9)
-sistema = experimento()
+if num_run == 0:
+    run_0 = ["s11", "s4", "s2", "s9", "s1", "s6", "s5", "s8", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_0)
+    sistema = experimento()
+elif num_run == 1:
+    run_1 = ["s2", "s9", "s1", "s8", "s4", "s5", "s11", "s6", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_1)
+    sistema = experimento()
+elif num_run == 2:
+    run_2 = ["s8", "s2", "s6", "s5", "s4", "s1", "s9", "s11", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_2)
+    sistema = experimento()
+elif num_run == 3:
+    run_3 = ["s1", "s9", "s2", "s8", "s6", "s11", "s5", "s4", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_3)
+    sistema = experimento()
+elif num_run == 4:
+    run_4 = ["s5", "s1", "s4", "s8", "s11", "s9", "s6", "s2", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_4)
+    sistema = experimento()
+elif num_run == 5:
+    run_5 = ["s4", "s5", "s11", "s8", "s2", "s1", "s9", "s6", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_5)
+    sistema = experimento()
+elif num_run == 6:
+    run_6 = ["s8", "s11", "s1", "s9", "s2", "s4", "s6", "s5", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_6)
+    sistema = experimento()
+elif num_run == 7:
+    run_7 = ["s6", "s2", "s5", "s8", "s11", "s1", "s9", "s4", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_7)
+    sistema = experimento()
+elif num_run == 8:
+    run_8 = ["s4", "s5", "s6", "s11", "s2", "s1", "s9", "s8", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_8)
+    sistema = experimento()
+elif num_run == 9:
+    run_9 = ["s1", "s8", "s9", "s4", "s6", "s2", "s11", "s5", "s3", "s7", "s10"]
+    dataset = cargar_CORe50('../dataset/Core50', run_9)
+    sistema = experimento()
 
 
 # Guardar resultados

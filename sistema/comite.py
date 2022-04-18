@@ -1,4 +1,3 @@
-from re import S
 import numpy as np
 from sistema.SVM import SVM
 from sistema.tools import numero_positivos, generar_negativos, numero_negativos
