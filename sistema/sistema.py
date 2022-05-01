@@ -151,8 +151,6 @@ class Sistema():
                     comite.marcar_miembro_para_eliminar(j)
         for comite in self.comites_no_supervisados:
             comite.eliminar_miembros_marcados()
-        global tamano_maximo_comite
-        tamano_maximo_comite += 5
 
 
     def __funcion_decision_comite_ganador(self, puntuaciones_comites: list) -> int:

@@ -9,7 +9,7 @@ funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
 percentil_FDR = 0.16            
 modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
 percentil_SDR = 0.25
-tamano_maximo_comite = 5
+tamano_maximo_comite = 18
 funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR   # Mayor respuesta o weibull
 
 def generar_negativos(muestras_inicializacion: list, posicion_positivo: int):
