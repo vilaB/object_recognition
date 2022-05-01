@@ -110,8 +110,14 @@ class Sistema():
             puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
             indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
             positivos = []
+            f = open("puntuaciones-nuevo-miembro.csv", "a")
             for indice in indices_ordenados[:numero_positivos]:
+                if indice != indices_ordenados[0]:
+                    f.write(", ")
+                f.write(puntuaciones_imagenes[indice]))
                 positivos.append(secuencia[indice, :].reshape(1, -1))
+            f.write("\n")
+            f.close()
             # indice = indices_ordenados[numero_positivos - 1]
             positivos = np.vstack(positivos)
             negativos = generar_negativos(self.muestra_de_inicializacion, prediccion)
