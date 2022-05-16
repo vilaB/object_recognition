@@ -114,7 +114,7 @@ class Sistema():
             for indice in indices_ordenados[:numero_positivos]:
                 if indice != indices_ordenados[0]:
                     f.write(", ")
-                f.write(puntuaciones_imagenes[indice]))
+                f.write(str(puntuaciones_imagenes[indice]))
                 positivos.append(secuencia[indice, :].reshape(1, -1))
             f.write("\n")
             f.close()
