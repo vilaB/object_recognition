@@ -17,7 +17,7 @@ tamanos_sup = []
 identificador = str(uuid.uuid4())
 print("IDENTIFICADOR: " + identificador)
 identificador = "experimentos/" + str(num_run)
-os.makedirs(identificador)
+# os.makedirs(identificador)
 num_experimento: int = 0
 
 def experimento():
