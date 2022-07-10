@@ -1,12 +1,12 @@
 #!/bin/bash
 
-python /EXPERIMENTOS/main.py 0
-python /EXPERIMENTOS/main.py 1
-python /EXPERIMENTOS/main.py 2
-python /EXPERIMENTOS/main.py 3
-python /EXPERIMENTOS/main.py 4
-python /EXPERIMENTOS/main.py 5
-python /EXPERIMENTOS/main.py 6
-python /EXPERIMENTOS/main.py 7
-python /EXPERIMENTOS/main.py 8
-python /EXPERIMENTOS/main.py 9
+python3 /EXPERIMENTOS/main.py 0 > "salida_$1_0"
+python3 /EXPERIMENTOS/main.py 1 > "salida_$1_1"
+python3 /EXPERIMENTOS/main.py 2 > "salida_$1_2"
+python3 /EXPERIMENTOS/main.py 3 > "salida_$1_3"
+python3 /EXPERIMENTOS/main.py 4 > "salida_$1_4"
+python3 /EXPERIMENTOS/main.py 5 > "salida_$1_5"
+python3 /EXPERIMENTOS/main.py 6 > "salida_$1_6"
+python3 /EXPERIMENTOS/main.py 7 > "salida_$1_7"
+python3 /EXPERIMENTOS/main.py 8 > "salida_$1_8"
+python3 /EXPERIMENTOS/main.py 9 > "salida_$1_9"
