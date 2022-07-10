@@ -2,7 +2,7 @@ import numpy as np
 from sistema.SVM import SVM
 from sistema.tools import numero_positivos, generar_negativos, numero_negativos
 
-modo_limitacion = 'div_1'
+modo_limitacion = 'gabriel'
 
 class Comite():
     miembros: list[dict[str, SVM | list | int ]] = None
@@ -137,11 +137,16 @@ class Comite():
         if len(self.miembros) > tamano:
             if modo_limitacion == 'rand':
                 to_pop = list(np.random.randint(0, len(self.miembros), size=len(self.miembros) - tamano))
-            elif modo_limitacion in ['div_1', 'div_2']:
+            elif modo_limitacion in ['div_1', 'div_2', 'gabriel']:
                 array = []
                 for objeto in muestra_inicializacion:
                     for matriz_frame in objeto:
                         array.append(matriz_frame)
+                # lst = self.obtener_positivos()
+                # array = []
+                # for positivos in lst:
+                #     for positivo in positivos:
+                #         array.append(positivo)
                 muestra_inicializacion = np.array(array)
                 muestra_inicializacion = np.vstack(muestra_inicializacion)
                 negativos = np.vstack([muestra_inicializacion])
@@ -162,15 +167,32 @@ class Comite():
                     for i in range(puntuaciones.shape[0]):
                         mat_scores = np.reshape(np.repeat(puntuaciones[i, :], puntuaciones.shape[1]),[puntuaciones.shape[1], puntuaciones.shape[1]])
                         div_points = div_points + np.sum(np.abs(mat_scores - np.transpose(mat_scores)), axis=0)
-
-                args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
-                to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
-                if 0 in to_pop:
-                    print("NOTIFICACIÓN| El primer clasificador no puede eliminarse por diversidad")
-                    to_pop.remove(0)
-                    to_pop.append(args_to_pop[0, (tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
-                if len(self.miembros) - 1 in to_pop:
-                    print("AVISO| Se está eliminando el clasificador que se acaba de introducir!")
+                elif modo_limitacion == 'gabriel':
+                    div_points = np.zeros([puntuaciones.shape[1]])
+                    for frame in puntuaciones:
+                        frame += 100 # Quero todos os valores positivos para calcular as diferenzas
+                        for num_classificator, classifier_score in enumerate(frame):
+                            differences = np.abs(np.delete(frame, [num_classificator]) - frame[num_classificator])
+                            diff = np.sum(differences)
+                            div_points[num_classificator] += diff
+                if modo_limitacion != "gabriel":
+                    args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
+                    to_pop = list(args_to_pop[0, tamano - len(self.miembros):])
+                    if 0 in to_pop:
+                        print("NOTIFICACIÓN| El primer clasificador no puede eliminarse por diversidad")
+                        to_pop.remove(0)
+                        to_pop.append(args_to_pop[0, (tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
+                    if len(self.miembros) - 1 in to_pop:
+                        print("AVISO| Se está eliminando el clasificador que se acaba de introducir!")
+                else:
+                    args_to_pop = np.argsort(div_points)  # Ordena los puntos de diversidad, como los scores están "en negativo" este argsort nos deja como primero al más alto, que sería el más pequeño (menos diverso).
+                    to_pop = list(args_to_pop[tamano - len(self.miembros):])
+                    if 0 in to_pop:
+                        print("NOTIFICACIÓN| El primer clasificador no puede eliminarse por diversidad")
+                        to_pop.remove(0)
+                        to_pop.append(args_to_pop[(tamano - len(self.miembros)) - 1]) # Tenemos que coger uno más desde el principio hasta el final
+                    if len(self.miembros) - 1 in to_pop:
+                        print("AVISO| Se está eliminando el clasificador que se acaba de introducir!")
                 
 
             to_pop = sorted(to_pop, reverse=True)
