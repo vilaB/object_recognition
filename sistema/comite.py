@@ -138,8 +138,12 @@ class Comite():
             if modo_limitacion == 'rand':
                 to_pop = list(np.random.randint(0, len(self.miembros), size=len(self.miembros) - tamano))
             elif modo_limitacion in ['div_1', 'div_2']:
-                muestra_inicializacion = np.array(muestra_inicializacion)
-                muestra_inicializacion = np.vstack(muestra_inicializacion[:, 0])
+                array = []
+                for objeto in muestra_inicializacion:
+                    for matriz_frame in objeto:
+                        array.append(matriz_frame)
+                muestra_inicializacion = np.array(array)
+                muestra_inicializacion = np.vstack(muestra_inicializacion)
                 negativos = np.vstack([muestra_inicializacion])
                 negatives = elegir_negativos_aleatoriamente(negativos, 1000)
                 data_bank_red = elegir_negativos_aleatoriamente(negatives, tamano_banco_div1_2)
