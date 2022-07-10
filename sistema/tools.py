@@ -19,14 +19,25 @@ def generar_negativos(muestras_inicializacion: list, posicion_positivo: int):
     return negativos
 
 
-# Función a nivel de comité (obtener una puntuación por imagen)
+# Función a nivel de comité (obtener una puntuación por imagen) 
+# In: miembros_comite x num_imágenes
+# Out: num_imágenes
 def FDR(puntuaciones_de_un_comite):
     if funcion_FDR == FUNCION_FDR.MEDIANA:     puntuaciones_imagenes = np.median(puntuaciones_de_un_comite, axis=0)
     elif funcion_FDR == FUNCION_FDR.PERCENTIL: puntuaciones_imagenes = np.quantile(puntuaciones_de_un_comite, percentil_FDR, axis=0)
     elif funcion_FDR == FUNCION_FDR.EL_MEJOR:  puntuaciones_imagenes = np.min(puntuaciones_de_un_comite, axis=0)
+    elif funcion_FDR == FUNCION_FDR.FIJO:
+        if puntuaciones_de_un_comite.shape[0] >= 3:
+            puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[2, :]
+        elif puntuaciones_de_un_comite.shape[0] == 2:
+            puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[1, :]
+        else:
+            puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[0, :]
     return puntuaciones_imagenes
 
 # Función a nivel de secuencia (obtener una puntuación por comité)
+# In: num_imágenes
+# Out: 1
 def SDR(puntuaciones_imagenes):
     if modo_SDR == FUNCION_SDR.MEDIANA:      puntuacion_comite = statistics.median(puntuaciones_imagenes)
     elif modo_SDR == FUNCION_SDR.PERCENTIL:  puntuacion_comite = np.quantile(puntuaciones_imagenes, percentil_SDR)

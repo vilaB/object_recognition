@@ -4,6 +4,7 @@ class FUNCION_FDR:
     PERCENTIL = "percentil"
     MEDIANA = "mediana"
     EL_MEJOR = "el mejor"
+    FIJO = "fijo"
 
 class FUNCION_SDR:
     PERCENTIL = "percentil"
