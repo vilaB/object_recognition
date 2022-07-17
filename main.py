@@ -7,6 +7,7 @@ import os
 import sys
 
 num_run = int(sys.argv[1])
+nombre_experimento = sys.argv[2]
 
 num_subsecuencias = 15
 resultados_nosup = []
@@ -14,17 +15,12 @@ resultados_sup = []
 tamanos_nosup = []
 tamanos_sup = []
 
-identificador = str(uuid.uuid4())
-print("IDENTIFICADOR: " + identificador)
-identificador = "experimentos/" + str(num_run)
-# os.makedirs(identificador)
+identificador = f"experimentos/{nombre_experimento}/{str(num_run)}"
 num_experimento: int = 0
 
 def experimento():
     print("INICIO EXPERIMENTO")
     primera_escena_inicializacion = dataset[0]
-    # global num_experimento
-    # os.makedirs(identificador + "/" + str(num_experimento))
     sistema = Sistema(primera_escena_inicializacion, nombre=identificador) # + "/" + str(num_experimento)
     # num_experimento += 1
     test = dataset[9:]
