@@ -7,6 +7,7 @@ numero_negativos=100
 umbral_reconocimiento=np.inf            # np.inf para closed set!!
 funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
 percentil_FDR = 0.16            
+tomar_el_numero_X = 3                    # Para modo coger valor fijo
 modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
 percentil_SDR = 0.25
 tamano_maximo_comite = 18
@@ -27,12 +28,13 @@ def FDR(puntuaciones_de_un_comite):
     elif funcion_FDR == FUNCION_FDR.PERCENTIL: puntuaciones_imagenes = np.quantile(puntuaciones_de_un_comite, percentil_FDR, axis=0)
     elif funcion_FDR == FUNCION_FDR.EL_MEJOR:  puntuaciones_imagenes = np.min(puntuaciones_de_un_comite, axis=0)
     elif funcion_FDR == FUNCION_FDR.FIJO:
-        if puntuaciones_de_un_comite.shape[0] >= 3:
+        if puntuaciones_de_un_comite.shape[0] >= tomar_el_numero_X:
             puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[2, :]
-        elif puntuaciones_de_un_comite.shape[0] == 2:
-            puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[1, :]
         else:
-            puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[0, :]
+            for i in range(1, tomar_el_numero_X):
+                if puntuaciones_de_un_comite.shape[0] == tomar_el_numero_X - i:
+                    puntuaciones_imagenes = np.sort(puntuaciones_de_un_comite, axis=0)[(tomar_el_numero_X - i) - 1, :]
+                    break
     return puntuaciones_imagenes
 
 # Función a nivel de secuencia (obtener una puntuación por comité)
