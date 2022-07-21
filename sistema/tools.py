@@ -2,6 +2,7 @@ import numpy as np
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 import statistics
 
+purgar_supervisado=False
 numero_positivos=10
 numero_negativos=100
 umbral_reconocimiento=np.inf            # np.inf para closed set!!

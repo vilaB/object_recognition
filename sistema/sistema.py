@@ -2,7 +2,7 @@ from sistema.comite import Comite
 import numpy as np
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
-from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR
+from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR, purgar_supervisado
 
 class Sistema():
     comites_no_supervisados: list[Comite] = None
@@ -94,7 +94,8 @@ class Sistema():
             self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         
         self.entrenamiento_supervisado(secuencia, individuo)
-        self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
+        if purgar_supervisado:
+            self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         return prediccion
 
     

@@ -1,9 +1,7 @@
 from sistema.sistema import Sistema
 from cargar_datos import cargar_CORe50
 import numpy as np
-import uuid
 import datetime
-import os
 import sys
 
 num_run = int(sys.argv[1])
