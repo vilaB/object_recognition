@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm *.txt
+
 echo ""
 echo ""
 echo "--- Modo no supervisado ---"
@@ -25,7 +27,6 @@ done
 echo ""
 echo ""
 echo "--- Modo no supervisado (tamaños)---"
-cd ../experimentos/$1
 touch ../../procesar_resultados/nosup_$1.txt
 for file in *tamanos_nosup.txt; 
 do
