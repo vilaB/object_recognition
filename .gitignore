@@ -1,5 +1,6 @@
 # Propios
 *.txt
+procesar_resultados/*.txt
 salida*
 analisis
 

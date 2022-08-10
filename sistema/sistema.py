@@ -2,7 +2,7 @@ from sistema.comite import Comite
 import numpy as np
 from scipy import stats
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
-from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR, purgar_supervisado
+from sistema.tools import generar_negativos, numero_positivos, numero_negativos, umbral_reconocimiento, funcion_FDR, percentil_FDR, modo_SDR, percentil_SDR, tamano_maximo_comite, funcion_decision_comite_ganador, FDR, SDR, purgar_supervisado, umbral_ya_es_reconocido
 
 class Sistema():
     comites_no_supervisados: list[Comite] = None
@@ -37,12 +37,14 @@ class Sistema():
         print("\t- Número de positivos (creación SVM): ", numero_positivos)
         print("\t- Número de negativos (creación SVM): ", numero_negativos)
         print("\t- Umbral de reconocimiento: ", umbral_reconocimiento)
+        print("\t- Umbral ya es reconocido: ", umbral_ya_es_reconocido)
         print("\t- Función de FDR: ", funcion_FDR)
         print("\t- Percentil de FDR: ", percentil_FDR)
         print("\t- Función de SDR: ", modo_SDR)
         print("\t- Percentil de SDR: ", percentil_SDR)
         print("\t- Tamaño máximo de comité: ", tamano_maximo_comite)
         print("\t- Función de decisión del comité ganador: ", funcion_decision_comite_ganador)
+        print("\t- Purgar supervisado: ", purgar_supervisado)
 
     
     # str method
@@ -105,7 +107,10 @@ class Sistema():
         prediccion = self.__funcion_decision_comite_ganador(puntuaciones_comites)
         puntuacion_ganadora = puntuaciones_comites[prediccion]
 
-        if prediccion >= 0:
+        if prediccion >= 0: 
+            if puntuacion_ganadora < umbral_ya_es_reconocido: # Ya se reconoce bien la secuencia
+                print(f"INFO - NOSUP|\t Se omite introducir un nuevo miembro en el comité porque la puntuación del comité es {puntuacion_ganadora}, lo que significa que ya lo reconoce con seguridad")
+                return
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
             puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
@@ -135,6 +140,10 @@ class Sistema():
             if comite is None: comite = self.comites_supervisados[individuo]
             matriz_del_comite = comite.procesar_secuencia(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
             puntuaciones_imagenes = FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
+            puntuacion_del_comite = SDR(puntuaciones_imagenes)
+            if puntuacion_del_comite < umbral_ya_es_reconocido:
+                print(f"INFO - SUP|\t Se omite introducir un nuevo miembro en el comité {individuo} porque la puntuación del comité es {puntuacion_del_comite}, lo que significa que ya lo reconoce con seguridad")
+                return
 
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
             puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)

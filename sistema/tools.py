@@ -2,14 +2,15 @@ import numpy as np
 from sistema.constantes import FUNCION_FDR, FUNCION_SDR, FUNCION_DECISION_COMITE_GANADOR
 import statistics
 
-purgar_supervisado=False
+purgar_supervisado=True
 numero_positivos=10
 numero_negativos=100
-umbral_reconocimiento=np.inf            # np.inf para closed set!!
-funcion_FDR = FUNCION_FDR.PERCENTIL       # Función a nivel de comité
+umbral_reconocimiento=np.inf                # np.inf para closed set!!
+umbral_ya_es_reconocido=0                   # Umbral para añadir o no un miembro al comité
+funcion_FDR = FUNCION_FDR.PERCENTIL         # Función a nivel de comité
 percentil_FDR = 0.16            
-tomar_el_numero_X = 3                    # Para modo coger valor fijo
-modo_SDR = FUNCION_SDR.MEDIANA           # Función a nivel de secuencia
+tomar_el_numero_X = 3                       # Para modo coger valor fijo
+modo_SDR = FUNCION_SDR.MEDIANA              # Función a nivel de secuencia
 percentil_SDR = 0.25
 tamano_maximo_comite = 18
 funcion_decision_comite_ganador = FUNCION_DECISION_COMITE_GANADOR.EL_MEJOR   # Mayor respuesta o weibull
