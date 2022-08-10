@@ -95,8 +95,8 @@ class Sistema():
         if prediccion >= 0: 
             self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         
-        self.entrenamiento_supervisado(secuencia, individuo)
-        if purgar_supervisado:
+        pred_supervisado = self.entrenamiento_supervisado(secuencia, individuo)
+        if purgar_supervisado and pred_supervisado >= 0:
             self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         return prediccion
 
@@ -110,7 +110,7 @@ class Sistema():
         if prediccion >= 0: 
             if puntuacion_ganadora < umbral_ya_es_reconocido: # Ya se reconoce bien la secuencia
                 print(f"INFO - NOSUP|\t Se omite introducir un nuevo miembro en el comité porque la puntuación del comité es {puntuacion_ganadora}, lo que significa que ya lo reconoce con seguridad")
-                return
+                return -1
             puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
             puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
@@ -143,7 +143,7 @@ class Sistema():
             puntuacion_del_comite = SDR(puntuaciones_imagenes)
             if puntuacion_del_comite < umbral_ya_es_reconocido:
                 print(f"INFO - SUP|\t Se omite introducir un nuevo miembro en el comité {individuo} porque la puntuación del comité es {puntuacion_del_comite}, lo que significa que ya lo reconoce con seguridad")
-                return
+                return -1
 
             puntuaciones_imagenes = np.array(puntuaciones_imagenes)
             puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
@@ -155,6 +155,7 @@ class Sistema():
             positivos = np.vstack(positivos)
             negativos = generar_negativos(self.muestra_de_inicializacion, individuo)
             comite.entrenamiento(positivos, negativos, numero_positivos, numero_negativos)
+            return individuo
     
 
     def healing(self):
