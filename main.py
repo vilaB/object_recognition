@@ -43,6 +43,30 @@ def experimento():
         res_sup.append(sup)
         tam_nosup.append(t_nosup)
         tam_sup.append(t_sup)
+    for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
+        # Fase Entrenamiento
+        for individuo, secuencia in enumerate(escena):
+            secuencias = np.array_split(secuencia, num_subsecuencias)
+            for secuencia in secuencias:
+                sistema.entrenar(secuencia, individuo)
+        sistema.healing()
+        nosup, sup, t_nosup, t_sup = fase_test(sistema, test)
+        res_nosup.append(nosup)
+        res_sup.append(sup)
+        tam_nosup.append(t_nosup)
+        tam_sup.append(t_sup)
+    for escena in dataset[1:9]:                         # Escenas de entrenamiento, las de test las cargamos siempre como las 3 últimas
+        # Fase Entrenamiento
+        for individuo, secuencia in enumerate(escena):
+            secuencias = np.array_split(secuencia, num_subsecuencias)
+            for secuencia in secuencias:
+                sistema.entrenar(secuencia, individuo)
+        sistema.healing()
+        nosup, sup, t_nosup, t_sup = fase_test(sistema, test)
+        res_nosup.append(nosup)
+        res_sup.append(sup)
+        tam_nosup.append(t_nosup)
+        tam_sup.append(t_sup)
     print("FIN EXPERIMENTO")
     resultados_nosup.append(res_nosup)
     resultados_sup.append(res_sup)
