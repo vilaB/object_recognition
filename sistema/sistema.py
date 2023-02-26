@@ -93,7 +93,7 @@ class Sistema():
                 print(f"INFO|\tSe ha supervisado la primera secuencia de tamaño {len(secuencia)} de la nueva escena para el comité {individuo}")
             else:
                 prediccion = self.entrenamiento_no_supervisado(secuencia)
-            if prediccion >= 0: 
+            if prediccion is not None and prediccion >= 0: 
                 self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
         
         pred_supervisado = self.entrenamiento_supervisado(secuencia, individuo)
