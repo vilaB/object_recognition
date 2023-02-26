@@ -99,7 +99,7 @@ class Sistema():
         pred_supervisado = self.entrenamiento_supervisado(secuencia, individuo)
         if purgar_supervisado and pred_supervisado >= 0:
             self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
-        return prediccion if prediccion else pred_supervisado
+        return pred_supervisado
 
     
     def entrenamiento_no_supervisado(self, secuencia: list):
