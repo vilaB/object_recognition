@@ -85,17 +85,7 @@ class Sistema():
         return prediccion_no_supervisados, prediccion_supervisados
 
 
-    def entrenar(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False, ejecutar_no_supervisado = False) -> int:
-        if ejecutar_no_supervisado:
-            if supervisar_no_supervisados:
-                self.entrenamiento_supervisado(secuencia, individuo, self.comites_no_supervisados[individuo])
-                prediccion = individuo
-                print(f"INFO|\tSe ha supervisado la primera secuencia de tamaño {len(secuencia)} de la nueva escena para el comité {individuo}")
-            else:
-                prediccion = self.entrenamiento_no_supervisado(secuencia)
-            if prediccion is not None and prediccion >= 0: 
-                self.comites_no_supervisados[prediccion].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
-        
+    def entrenar(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False) -> int:
         pred_supervisado = self.entrenamiento_supervisado(secuencia, individuo)
         if purgar_supervisado and pred_supervisado >= 0:
             self.comites_supervisados[individuo].purgar_comite(tamano_maximo_comite, self.muestra_de_inicializacion)
