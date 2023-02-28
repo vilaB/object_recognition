@@ -14,7 +14,7 @@ class Agent():
     init: list = None
     name: str = None 
 
-    def __init__(self, init: list, names_comites: list = None, name: str = None):
+    def __init__(self, init: list, ensemble_names: list = None, name: str = None):
         print("Building agent...")
         self.init = init
         self.ensembles_uns = []
@@ -22,48 +22,48 @@ class Agent():
         self.name = name + "/" if name else ""
         for individuo in range(len(init)):
             negatives = generate_negatives(init, individuo)
-            comite_no_supervisado = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
-            comite_supervisado = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
-            self.ensembles_uns.append(comite_no_supervisado)
-            self.ensembles_sup.append(comite_supervisado)
-        if names_comites is not None:
-            if len(init) != len(names_comites):
-                raise Exception("El número de names de comité no coincide con el número de individuos pasado en la muestra de inicialización.")
-            for i, name_comite in enumerate(names_comites):
-                self.ensembles_uns[i].name = self.name + name_comite
-                self.ensembles_sup[i].name = self.name + name_comite
+            ens_uns = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
+            ens_sup = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
+            self.ensembles_uns.append(ens_uns)
+            self.ensembles_sup.append(ens_sup)
+        if ensemble_names is not None:
+            if len(init) != len(ensemble_names):
+                raise Exception("The number of ensemble names and init sequences have to match.")
+            for i, ens_name in enumerate(ensemble_names):
+                self.ensembles_uns[i].name = self.name + ens_name
+                self.ensembles_sup[i].name = self.name + ens_name
         else:
             for i in range(len(init)):
                 self.ensembles_uns[i].name = self.name + str(i)
                 self.ensembles_sup[i].name = self.name + str(i)
-        print("Construcción del sistema finalizada.")
-        print("Los parámetros del sistema son: ")
-        print("\t- Número de positives (creación SVM): ", number_of_positives)
-        print("\t- Número de negatives (creación SVM): ", number_of_negatives)
-        print("\t- Umbral de reconocimiento: ", threshold_ack)
-        print("\t- Umbral ya es reconocido: ", threshold_we_already_ack_this)
-        print("\t- Función de FDR: ", FDR_function)
-        print("\t- Percentil de FDR: ", percentile_FDR)
-        print("\t- Función de SDR: ", SDR_mode)
-        print("\t- Percentil de SDR: ", percentie_SDR)
-        print("\t- Tamaño máximo de comité: ", max_size_ensemble)
-        print("\t- Función de decisión del comité ganador: ", winner_decision)
-        print("\t- Purgar supervisado: ", purger_supervided)
+        print("Agent built completed.")
+        print("Agent parameters are: ")
+        print("\t- Number of positives (SVM creation): ", number_of_positives)
+        print("\t- Number of negatives (SVM creation): ", number_of_negatives)
+        print("\t- Threshold for recognize: ", threshold_ack)
+        print("\t- Threshold for learning: ", threshold_we_already_ack_this)
+        print("\t- FDR function: ", FDR_function)
+        print("\t- FDR percentile: ", percentile_FDR)
+        print("\t- SDR function: ", SDR_mode)
+        print("\t- SDR percentile: ", percentie_SDR)
+        print("\t- Max ensemble size: ", max_size_ensemble)
+        print("\t- Winner decision: ", winner_decision)
+        print("\t- Purge supervised: ", purger_supervided)
 
     
     # str method
     def __str__(self):
         return """
-        Sistema:
-            - Número de positives (creación SVM): {}
-            - Número de negatives (creación SVM): {}
-            - Umbral de actualización: {}
-            - Función de FDR: {}
-            - Percentil de FDR: {}
-            - Función de SDR: {}
-            - Percentil de SDR: {}
-            - Tamaño máximo de comité: {}
-            - Función de decisión del comité ganador: {}
+        Agent:
+            - Number of positives (SVM creation): {}
+            - Number of negatives (SVM creation): {}
+            - Threshold for recognize: {}
+            - FDR function: {}
+            - FDR percentile: {}
+            - SDR function: {}
+            - SDR percentile: {}
+            - Max ensemble size: {}
+            - Winner decision: {}
             """.format(number_of_positives, number_of_negatives, threshold_ack, FDR_function, percentile_FDR, SDR_mode, percentie_SDR, max_size_ensemble, winner_decision)
 
 
