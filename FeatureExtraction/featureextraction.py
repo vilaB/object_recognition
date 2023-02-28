@@ -8,8 +8,12 @@ from os.path import isfile, join
 import os
 
 
-dataset = "../../datasets/core50_128x128" # Raíz dataset
-saveplace = "../../caracteristicas/Core50"            # Punto de guardado
+dataset = "../../datasets/core50_128x128"   # Dataset images
+saveplace = "../../caracteristicas/Core50"  # Directory to save extracted features
+
+
+__author__ = "Gabriel Vilariño Besteiro"
+
 
 def create_directory(directory):
     try:

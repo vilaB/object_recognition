@@ -1,8 +1,12 @@
 # Propios
 *.txt
 procesar_resultados/*.txt
+process_results/*.txt
 salida*
+output*
 analisis
+analisis
+analysis
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -12,6 +16,7 @@ __pycache__/
 # nohup
 nohup.out
 experimentos/*
+experiments/*
 
 # C extensions
 *.so
