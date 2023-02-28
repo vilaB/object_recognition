@@ -1,7 +1,7 @@
 from agent.ensemble import Ensemble
 import numpy as np
 from scipy import stats
-from agent.constants import FDR_FUNCTION, SDR_FUNCTION, WINNR_ENSEMBLE
+from agent.constants import WINNR_ENSEMBLE
 from agent.tools import generate_negatives, number_of_positives, number_of_negatives, threshold_ack, FDR_function, percentile_FDR, SDR_mode, percentie_SDR, max_size_ensemble, winner_decision, FDR, SDR, purger_supervided, threshold_we_already_ack_this
 
 
@@ -68,137 +68,103 @@ class Agent():
 
 
     def ensembles_size(self):
-        tam_nosup = 0
-        for comite in self.ensembles_uns:
-            tam_nosup += comite.size_ensemble()
-        tam_nosup = tam_nosup / len(self.ensembles_uns)
+        size_uns = 0
+        for ensemble in self.ensembles_uns:
+            size_uns += ensemble.size_ensemble()
+        size_uns = size_uns / len(self.ensembles_uns)
 
-        tam_sup = 0
-        for comite in self.ensembles_sup:
-            tam_sup += comite.size_ensemble()
-        tam_sup = tam_sup / len(self.ensembles_sup)
-        return tam_nosup, tam_sup
+        size_sup = 0
+        for ensemble in self.ensembles_sup:
+            size_sup += ensemble.size_ensemble()
+        size_sup = size_sup / len(self.ensembles_sup)
+        return size_uns, size_sup
         
 
-    def test(self, secuencia: list):
-        puntuaciones_ensembles_uns, _ = self.__show_sequence(secuencia, self.ensembles_uns)
-        prediccion_no_supervisados = self.__winner_decision(puntuaciones_ensembles_uns) 
+    def test(self, sequence: list):
+        score_uns, _ = self.__show_sequence(sequence, self.ensembles_uns)
+        pred_uns = self.__winner_decision(score_uns) 
 
-        puntuaciones_ensembles_sup, _ = self.__show_sequence(secuencia, self.ensembles_sup)
-        prediccion_supervisados = self.__winner_decision(puntuaciones_ensembles_sup)
-        return prediccion_no_supervisados, prediccion_supervisados
+        score_sup, _ = self.__show_sequence(sequence, self.ensembles_sup)
+        pred_sup = self.__winner_decision(score_sup)
+        return pred_uns, pred_sup
 
 
-    def train(self, secuencia: list, individuo: int, supervisar_no_supervisados: bool = False) -> int:
-        pred_supervisado = self.entrenamiento_supervisado(secuencia, individuo)
-        if purger_supervided and pred_supervisado >= 0:
-            self.ensembles_sup[individuo].purge_ensembles(max_size_ensemble, self.init)
-        return pred_supervisado
-
-    
-    def entrenamiento_no_supervisado(self, secuencia: list):
-        # Predicción por parte del sistema no supervisado
-        puntuaciones_comites, puntuaciones_imagenes_de_comites = self.__show_sequence(secuencia, self.ensembles_uns)
-        prediccion = self.__winner_decision(puntuaciones_comites)
-        puntuacion_ganadora = puntuaciones_comites[prediccion]
-
-        if prediccion >= 0: 
-            if puntuacion_ganadora < threshold_we_already_ack_this: # Ya se reconoce bien la secuencia
-                print(f"INFO - NOSUP|\t Se omite introducir un nuevo miembro en el comité porque la puntuación del comité es {puntuacion_ganadora}, lo que significa que ya lo reconoce con seguridad")
-                return -1
-            puntuaciones_imagenes = puntuaciones_imagenes_de_comites[prediccion]
-            puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
-            indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
-            positives = []
-            f = open("puntuaciones-nuevo-miembro.csv", "a")
-            for indice in indices_ordenados[:number_of_positives]:
-                if indice != indices_ordenados[0]:
-                    f.write(", ")
-                f.write(str(puntuaciones_imagenes[indice]))
-                positives.append(secuencia[indice, :].reshape(1, -1))
-            f.write("\n")
-            f.close()
-            # indice = indices_ordenados[number_of_positives - 1]
-            positives = np.vstack(positives)
-            negatives = generate_negatives(self.init, prediccion)
-            self.ensembles_uns[prediccion].train(positives, negatives, number_of_positives, number_of_negatives)
-
-            # Para medición de utilidad
-            # self.ensembles_uns[prediccion].set_utility(puntuacion_ganadora)
-        return prediccion
+    def train(self, sequence: list, number_of_object: int, supervisar_no_supervisados: bool = False) -> int:
+        pred_sup = self.supervised_training(sequence, number_of_object)
+        if purger_supervided and pred_sup >= 0:
+            self.ensembles_sup[number_of_object].purge_ensembles(max_size_ensemble, self.init)
+        return pred_sup
         
-    
 
-    def entrenamiento_supervisado(self, secuencia: list[np.array], individuo: int, comite: Ensemble = None):
-        if individuo >= 0:
-            if comite is None: comite = self.ensembles_sup[individuo]
-            matriz_del_comite = comite.process_sequence(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
-            puntuaciones_imagenes = FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
-            puntuacion_del_comite = SDR(puntuaciones_imagenes)
-            if puntuacion_del_comite < threshold_we_already_ack_this:
-                print(f"INFO - SUP|\t Se omite introducir un nuevo miembro en el comité {individuo} porque la puntuación del comité es {puntuacion_del_comite}, lo que significa que ya lo reconoce con seguridad")
+    def supervised_training(self, sequence: list[np.array], object_number: int, ensemble: Ensemble = None):
+        if object_number >= 0:
+            if ensemble is None: ensemble = self.ensembles_sup[object_number]
+            matrix = ensemble.process_sequence(sequence)
+            scores_images = FDR(matrix)  
+            score_ensemble = SDR(scores_images)
+            if score_ensemble < threshold_we_already_ack_this:
+                print(f"INFO - SUP|\t Not adding new member to ensemble {object_number} bc ensemble score is {score_ensemble}, which means we already recognize the object well")
                 return -1
 
-            puntuaciones_imagenes = np.array(puntuaciones_imagenes)
-            puntuaciones_imagenes = np.absolute(puntuaciones_imagenes)
-            indices_ordenados = np.argsort(puntuaciones_imagenes)                       # Nos devuelve una lista con las posiciones con las puntuaciones más bajas (+ cercanas a la frontera del conocimiento)
+            scores_images = np.absolute(scores_images)
+            index_sorted = np.argsort(scores_images)
             positives = []
-            for indice in indices_ordenados[:number_of_positives]:
-                positives.append(secuencia[indice, :].reshape(1, -1))
-            # indice = indices_ordenados[number_of_positives - 1]
+            for i in index_sorted[:number_of_positives]:
+                positives.append(sequence[i, :].reshape(1, -1))
+
             positives = np.vstack(positives)
-            negatives = generate_negatives(self.init, individuo)
-            comite.train(positives, negatives, number_of_positives, number_of_negatives)
-            return individuo
+            negatives = generate_negatives(self.init, object_number)
+            ensemble.train(positives, negatives, number_of_positives, number_of_negatives)
+            return object_number
     
 
+    # Not used for supervised
     def healing(self):
-        for i, comite in enumerate(self.ensembles_uns):
-            secuencias_positivas = comite.get_positives()
-            for j, secuencia in enumerate(secuencias_positivas):                                    # Número de clasificador, secuencia usada para su creación
-                puntuaciones, _ = self.__show_sequence(secuencia, self.ensembles_uns)
-                prediccion = self.__winner_decision(puntuaciones)
-                if prediccion != i:
-                    comite.mark_member_for_delete(j)
-        for comite in self.ensembles_uns:
-            comite.delete_marked_members()
+        for i, ensemble in enumerate(self.ensembles_uns):
+            seq_positives = ensemble.get_positives()
+            for j, seq in enumerate(seq_positives):                                    # Número de clasificador, secuencia usada para su creación
+                scores, _ = self.__show_sequence(seq, self.ensembles_uns)
+                pred = self.__winner_decision(scores)
+                if pred != i:
+                    ensemble.mark_member_for_delete(j)
+        for ensemble in self.ensembles_uns:
+            ensemble.delete_marked_members()
 
 
-    def __winner_decision(self, puntuaciones_comites: list) -> int:
+    def __winner_decision(self, scores_ensembles: list) -> int:
         if winner_decision == WINNR_ENSEMBLE.THE_BEST:
-            if np.min(puntuaciones_comites) < threshold_ack:
-                prediccion = np.argmin(puntuaciones_comites)
+            if np.min(scores_ensembles) < threshold_ack:
+                pred = np.argmin(scores_ensembles)
             else:
-                prediccion = -1
+                pred = -1 # Open set
         elif winner_decision == WINNR_ENSEMBLE.WEIBULL:
-            puntuaciones_comites_ordenadas = np.sort(puntuaciones_comites)
-            mayores_respuestas = puntuaciones_comites_ordenadas[1:int(len(puntuaciones_comites_ordenadas)/2)]
-            mediana = np.median(puntuaciones_comites_ordenadas[1:])
+            scores_ensembles_sorted = np.sort(scores_ensembles)
+            higher_responses = scores_ensembles_sorted[1:int(len(scores_ensembles_sorted)/2)]
+            median = np.median(scores_ensembles_sorted[1:])
 
-            distancia = np.abs(mayores_respuestas - mediana)
-            puntuacion_ganador = np.abs(puntuaciones_comites_ordenadas[0] - mediana)
+            distance = np.abs(higher_responses - median)
+            puntuacion_ganador = np.abs(scores_ensembles_sorted[0] - median)
             
-            shape,_,escala = stats.weibull_min.fit(distancia, floc=0)
+            shape,_,scale = stats.weibull_min.fit(distance, floc=0)
             # Decision
-            if ( self.__weibull(puntuacion_ganador, escala, shape) < threshold_ack):
-                prediccion = np.argmin(puntuaciones_comites)
+            if ( self.__weibull(puntuacion_ganador, scale, shape) < threshold_ack):
+                pred = np.argmin(scores_ensembles)
             else:
-                prediccion = -1
+                pred = -1 # Open set
 
-        return prediccion
+        return pred
 
     def __weibull(self, x,n,a):
         return (a / n) * (x / n)**(a - 1) * np.exp(-(x / n)**a)
     
-    def __show_sequence(self, secuencia, comites: list[Ensemble]) -> tuple:
-        puntuaciones_de_cada_comite = []
-        puntuaciones_imagenes_de_comites = []
-        for i, comite in enumerate(comites):
-            matriz_del_comite = comite.process_sequence(secuencia)  # Devolve unha lista coa puntuación que lle da cada un dos ensembles do IoI
-            puntuaciones_imagenes = FDR(matriz_del_comite)  # Calcula la puntuación final, por ejemplo, con la media de la lista
-            puntuaciones_imagenes_de_comites.append(puntuaciones_imagenes)
-            puntuacion_del_comite = SDR(puntuaciones_imagenes)
-            puntuaciones_de_cada_comite.append(puntuacion_del_comite)
-        return puntuaciones_de_cada_comite, puntuaciones_imagenes_de_comites
+    def __show_sequence(self, sequence, ensembles: list[Ensemble]) -> tuple:
+        scores_ensembles = []
+        scores_ensembles_images = []
+        for ensemble in ensembles:
+            matrix = ensemble.process_sequence(sequence)
+            scored_images = FDR(matrix) 
+            scores_ensembles_images.append(scored_images)
+            puntuacion_del_comite = SDR(scored_images)
+            scores_ensembles.append(puntuacion_del_comite)
+        return scores_ensembles, scores_ensembles_images
 
