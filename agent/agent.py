@@ -22,8 +22,8 @@ class Agent():
         self.name = name + "/" if name else ""
         for individuo in range(len(init)):
             negatives = generate_negatives(init, individuo)
-            ens_uns = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
-            ens_sup = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, sistema=self)
+            ens_uns = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, agent=self)
+            ens_sup = Ensemble(positives=init[individuo], negatives=negatives, number_of_positives=number_of_positives, number_of_negatives=number_of_negatives, agent=self)
             self.ensembles_uns.append(ens_uns)
             self.ensembles_sup.append(ens_sup)
         if ensemble_names is not None:

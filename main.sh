@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir "./experiments/$1"
+mkdir -p "./experiments/$1"
 python3 ./main.py 0 $1 > "./experiments/$1/output_0"
 python3 ./main.py 1 $1 > "./experiments/$1/output_1"
 python3 ./main.py 2 $1 > "./experiments/$1/output_2"

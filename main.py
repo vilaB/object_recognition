@@ -27,7 +27,7 @@ def experiment():
     res_unsup, res_sup = [], []
     size_unsup, size_sup = [], []
 
-    nosup, sup, s_unsup, s_sup = fase_test(agent, test)
+    nosup, sup, s_unsup, s_sup = test_phase(agent, test)
     res_unsup.append(nosup)
     res_sup.append(sup)
     size_unsup.append(s_unsup)
@@ -79,43 +79,43 @@ def test_phase(agent: Agent, test: list):
 
 if num_run == 0:
     run_0 = ["s11", "s4", "s2", "s9", "s1", "s6", "s5", "s8", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_0)
+    dataset = load_CORe50('./dataset/Core50', run_0)
     agent = experiment()
 elif num_run == 1:
     run_1 = ["s2", "s9", "s1", "s8", "s4", "s5", "s11", "s6", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_1)
+    dataset = load_CORe50('./dataset/Core50', run_1)
     agent = experiment()
 elif num_run == 2:
     run_2 = ["s8", "s2", "s6", "s5", "s4", "s1", "s9", "s11", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_2)
+    dataset = load_CORe50('./dataset/Core50', run_2)
     agent = experiment()
 elif num_run == 3:
     run_3 = ["s1", "s9", "s2", "s8", "s6", "s11", "s5", "s4", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_3)
+    dataset = load_CORe50('./dataset/Core50', run_3)
     agent = experiment()
 elif num_run == 4:
     run_4 = ["s5", "s1", "s4", "s8", "s11", "s9", "s6", "s2", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_4)
+    dataset = load_CORe50('./dataset/Core50', run_4)
     agent = experiment()
 elif num_run == 5:
     run_5 = ["s4", "s5", "s11", "s8", "s2", "s1", "s9", "s6", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_5)
+    dataset = load_CORe50('./dataset/Core50', run_5)
     agent = experiment()
 elif num_run == 6:
     run_6 = ["s8", "s11", "s1", "s9", "s2", "s4", "s6", "s5", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_6)
+    dataset = load_CORe50('./dataset/Core50', run_6)
     agent = experiment()
 elif num_run == 7:
     run_7 = ["s6", "s2", "s5", "s8", "s11", "s1", "s9", "s4", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_7)
+    dataset = load_CORe50('./dataset/Core50', run_7)
     agent = experiment()
 elif num_run == 8:
     run_8 = ["s4", "s5", "s6", "s11", "s2", "s1", "s9", "s8", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_8)
+    dataset = load_CORe50('./dataset/Core50', run_8)
     agent = experiment()
 elif num_run == 9:
     run_9 = ["s1", "s8", "s9", "s4", "s6", "s2", "s11", "s5", "s3", "s7", "s10"]
-    dataset = load_CORe50('../dataset/Core50', run_9)
+    dataset = load_CORe50('./dataset/Core50', run_9)
     agent = experiment()
 
 

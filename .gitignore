@@ -15,8 +15,9 @@ __pycache__/
 
 # nohup
 nohup.out
-experimentos/*
 experiments/*
+core50_128x128/*
+dataset/*
 
 # C extensions
 *.so
