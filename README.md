@@ -7,7 +7,8 @@ S²-LOR is an ensemble-based system that allows learning over time based from no
 
 Formally, S²-LOR, takes a video sequence and passes it through the pre-trained model of the ResNet-50, obtaining its embedding vectors. The system then evaluates those vectors in the ensembles, obtaining a score for each classifier. Once that has been obtained, an overall score is determined and the identity associated with the sample is determined.  In case the prediction does not match the correct identity, a new classifier is introduced to improve the predictions.
 
-----Imagen---
+
+![Schema](https://user-images.githubusercontent.com/58976466/222124989-ed18e1b7-1fe6-4748-9a0f-b0d2c6dd430e.png)
 
 ## Dependecies
 
@@ -29,45 +30,50 @@ conda install tensorflow==2.10.0 tensorflow-hub==0.8.0 pillow==9.4.0 opencv==4.6
 ```
 
 ## Repo Structure & Descriptions
-* [FeatureExtraction](./FeatureExtraction): files to extract de embedding vector of the frames
-    * [feature_extraction.py](./FeatureExtraction/feature_extraction): ResNet50 configuration for generate de embedding vectors
-    * [normalize.py](./FeatureExtraction/normalize): script to normalize de embedding vectors
-* [table.sh](./Table/table.sh): script to show current metrics of the running experiment
-* [procesar_resultados](./procesar_resultados): folder where the result tables of the desired experiment will be stored.
-    * [main.sh](./procesar_resultados/main.sh): script for generate the resul tables of the [id_experiment] experiment
+* [feature_extraction.py](./FeatureExtraction/feature_extraction): ResNet50 configuration for generate de embedding vectors
+* [process_results](./process_results): folder where the result tables of the desired experiment will be stored.
+    * [main.sh](./process_results/main.sh): script for generate the resul tables of the [id_experiment] experiment
 * [main.py](./main.py): script to run each experiment, with the proposed configuration
-* [SVM.py](./sistema/SVM.py): file with the implementation code for each weak SVM classifier
-* [comite.py](./sistema/comite.py): ensemble implementation, with de addition mechanisms for training and initialization
-* [sistema.py](./sistema/sistema.py): implementation detail for each mode of processing
-* [constantes.py](./sistema/constantes.py): configuration details for decision mechanism.
-* [tools.py](./sistema/tools.py): functions to generate de scores for each frame and sequence and to generate the negatives.
-* [cargar_datos.py](./cargar_datos.py): script to load and normalize the CORE50 data.
+* [SVM.py](./agent/SVM.py): file with the implementation code for each weak SVM classifier
+* [ensemble.py](./agent/ensemble.py): ensemble implementation, with de addition mechanisms for training and initialization
+* [agent.py](./agent/agent.py): implementation detail for each mode of processing
+* [constants.py](./agent/constants.py): configuration details for decision mechanism.
+* [tools.py](./agent/tools.py): functions to generate de scores for each frame and sequence and to generate the negatives.
+* [load_data.py](./load_data.py): script to load and normalize the CORE50 data.
 * [main.sh](./main.sh): script to execute 10 runs for the experiment id indicated by command line.
 
 
 ## Running the experiments
 #### Previous configurations
 You must download de cropped database(`cropped_128x128_images.zip`) from [CORE50 page](https://vlomonaco.github.io/core50/index.html#download). Then you have to unzip the folder inside the project home directory (`object_recognition`)
-#### To run S²-LOR proccesing of CORE50 database
+
+#### Feature extraction
+In order to make the feature extraction process faster, it is performed offline. To do this, once the `core50_128x128` folder is obtained, the following commands are executed.
 ```
 conda activate slor_dev
+cd FeatureExtraction
+python3 featureextraction.py
+cd ..
+```
+
+#### To run S²-LOR proccesing of CORE50 database
+```
 bash main.sh experiment_name
 ```
 It is recommended to change the name of the experiment depending on what you want to test, trying to give names that are representative of what you want to evaluate. For example, `supervised_no_limit` for a supervised approach with no classifier number limit.
 
 #### Files generated from the streaming experiment
-1. A folder with the experiment title is generated under the folder `experimentos`.`[num_run]` denotes the repetition about which information is stored. This folder contains:
-    - `[num_run]resultados_sup.txt` which contains the accuracy results for each adaptation steps.
-    - `[num_run]tamanos_sup.txt` which contains the final ensemble size for each adaptation steps.
-    - `salida_[num_run]` which shows the stacktrace of each run.
+1. A folder with the experiment title is generated under the folder `experiments`.`[num_run]` denotes the repetition about which information is stored. This folder contains:
+    - `[num_run]results_sup.txt` which contains the accuracy results for each adaptation steps.
+    - `[num_run]ensemble_size_sup.txt` which contains the final ensemble size for each adaptation steps.
+    - `output_[num_run]` which shows the stacktrace of each run.
 
-2. In the folder `procesar_resultados`, there are a script called `main.sh`. Running this script you could obtain the result tables of the runned experiment. You must execute:
+2. In the folder `process_results`, there are a script called `main.sh`. Running this script you could obtain the result tables of the runned experiment. You must execute:
     ```
-    cd procesar_resultados
+    cd process_results
     bash main.sh experiment_name
     ```
  
     
-
 # Contact
 If you have any questions about this code, please do not hesitate to contact me at gabrivb@outlook.es or gabriel.vilarino@rai.usc.es.
