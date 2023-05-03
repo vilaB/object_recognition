@@ -7,8 +7,7 @@ S²-LOR is an ensemble-based system that allows learning over time based from no
 
 Formally, S²-LOR, takes a video sequence and passes it through the pre-trained model of the ResNet-50, obtaining its embedding vectors. The system then evaluates those vectors in the ensembles, obtaining a score for each classifier. Once that has been obtained, an overall score is determined and the identity associated with the sample is determined.  In case the prediction does not match the correct identity, a new classifier is introduced to improve the predictions.
 
-
-![Schema](https://user-images.githubusercontent.com/58976466/222124989-ed18e1b7-1fe6-4748-9a0f-b0d2c6dd430e.png)
+![Schema](https://user-images.githubusercontent.com/58976466/236062428-79527429-7d88-4c73-87cd-39f2c5d9442a.png)
 
 ## Dependecies
 
